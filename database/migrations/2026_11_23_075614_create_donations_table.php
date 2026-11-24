@@ -10,17 +10,23 @@ return new class extends Migration
     {
         Schema::create('donations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->string('food_type');
-            $table->string('quantity')->nullable();
+            $table->string('food_type'); // Makanan Berat, Roti & Kue, Bahan Mentah, Buah & Sayur, Minuman, Lainnya
+            $table->string('quantity');
+            $table->string('delivery_method')->default('Ambil Sendiri'); // Ambil Sendiri, Diantar Pendonasi, Jemput Terjadwal
             $table->string('location');
             $table->text('pickup_address');
             $table->string('pic_name');
             $table->string('pic_contact');
             $table->dateTime('deadline');
-            $table->enum('status', ['available', 'claimed', 'completed', 'expired'])->default('available');
+            $table->text('allergen_notes')->nullable();
+            $table->text('storage_notes')->nullable();
+            $table->string('image_url')->nullable();
+            $table->enum('status', ['urgent', 'available', 'claimed', 'completed', 'expired'])->default('available');
+            $table->foreignId('claimed_by_user_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('claimed_at')->nullable();
             $table->timestamps();
         });
     }

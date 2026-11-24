@@ -2,9 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicDonationController;
-use App\Http\Controllers\ClaimController;
 
-// Halaman Beranda Satu Meja
+// 1. Halaman Beranda Utama
 Route::get('/', function () {
     $latestDonations = collect();
     $stats = [
@@ -15,34 +14,32 @@ Route::get('/', function () {
 
     try {
         if (\Illuminate\Support\Facades\Schema::hasTable('donations')) {
-            $latestDonations = \App\Models\Donation::whereIn('status', ['available', 'urgent'])
+            $latestDonations = \App\Models\Donation::whereNull('claimed_by_user_id')
+                ->whereNotIn('status', ['claimed', 'expired'])
                 ->where('deadline', '>', now())
                 ->latest()
                 ->take(6)
                 ->get();
 
             $stats['total_donations'] = \App\Models\Donation::count();
-            $stats['claimed_donations'] = \App\Models\Donation::where('status', 'claimed')->count();
+            $stats['claimed_donations'] = \App\Models\Donation::where('status', 'claimed')->orWhereNotNull('claimed_by_user_id')->count();
         }
         if (\Illuminate\Support\Facades\Schema::hasTable('users')) {
-            $stats['verified_institutions'] = \App\Models\User::where('is_verified', true)->count();
+            $stats['verified_institutions'] = \App\Models\User::where('is_verified', true)->orWhere('status', 'verified')->count();
         }
     } catch (\Throwable $e) {
-        // Handled gracefully
+        // Fallback safely
     }
 
     return view('home', compact('latestDonations', 'stats'));
 })->name('home');
 
-// Halaman Cari Donasi
+// 2. Public Donation Search & Detail
 Route::get('/donasi', [PublicDonationController::class, 'index'])->name('donations.index');
+Route::get('/api/donations/active', [PublicDonationController::class, 'activeJson'])->name('donations.json');
 
-// Aksi Klaim
-Route::post('/donasi/{donation}/klaim', [ClaimController::class, 'store'])
-    ->middleware(['auth', 'verified.recipient'])
-    ->name('donations.claim');
-
-// Route login sementara (hapus nanti jika fitur Login sudah selesai)
-Route::get('/login', function () {
-    return 'Halaman Login (Belum dibuat)';
-})->name('login');
+// 3. Load Modular Route Files (Sesuai Aturan Kerja Tim)
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
+require __DIR__ . '/pendonasi.php';
+require __DIR__ . '/penerima.php';

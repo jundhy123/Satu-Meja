@@ -93,31 +93,55 @@
                         Cari Donasi
                     </a>
 
-                    <a href="#tentang"
-                       class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white/80 hover:text-white transition rounded-lg">
-                        Tentang Kami
-                    </a>
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}"
+                               class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('admin.*') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
+                                Dasbor Admin
+                            </a>
+                        @elseif(auth()->user()->isPendonasi())
+                            <a href="{{ route('pendonasi.dashboard') }}"
+                               class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('pendonasi.*') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
+                                Dasbor Pendonasi
+                            </a>
+                            @if(auth()->user()->status === 'verified')
+                                <a href="{{ route('pendonasi.donations.create') }}"
+                                   class="min-h-[44px] px-4 inline-flex items-center text-sm font-bold text-forest bg-sage hover:bg-sage-600 hover:text-white transition rounded-xl shadow-sm">
+                                    + Bagikan Pangan
+                                </a>
+                            @endif
+                        @else
+                            <a href="{{ route('penerima.dashboard') }}"
+                               class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('penerima.*') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
+                                Dasbor Penerima
+                            </a>
+                        @endif
+                    @endauth
                 </div>
 
                 <!-- Right Action / Auth Buttons -->
                 <div class="hidden md:flex items-center space-x-3">
                     @auth
-                        <div class="flex items-center gap-3 bg-forest-800/80 px-4 py-2 rounded-xl border border-sage/20">
+                        <div class="flex items-center gap-3 bg-forest-800/80 px-3 py-1.5 rounded-xl border border-sage/20">
                             <div class="flex flex-col text-right">
-                                <span class="text-xs text-sage font-medium uppercase tracking-wider">
-                                    {{ auth()->user()->role ?? 'Pengguna' }}
+                                <span class="text-[10px] text-sage font-medium uppercase tracking-wider">
+                                    {{ auth()->user()->role ?? 'Pengguna' }} ({{ auth()->user()->status }})
                                 </span>
-                                <span class="text-sm font-bold text-white leading-tight">
-                                    {{ auth()->user()->name }}
+                                <span class="text-xs font-bold text-white leading-tight">
+                                    {{ auth()->user()->institution_name ?? auth()->user()->name }}
                                 </span>
                             </div>
-                            <span class="w-8 h-8 rounded-full bg-sage/30 text-white flex items-center justify-center font-bold text-sm border border-sage/40">
-                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                            </span>
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" title="Keluar Akun"
+                                        class="min-h-[36px] px-3 py-1 inline-flex items-center text-xs font-bold text-white/90 bg-red-600/80 hover:bg-red-700 rounded-lg transition">
+                                    Keluar
+                                </button>
+                            </form>
                         </div>
                     @else
                         <a href="{{ route('login') }}"
-                           class="min-h-[44px] px-5 inline-flex items-center justify-center text-sm font-bold text-forest bg-white hover:bg-sage-100 transition rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-white">
+                           class="min-h-[44px] px-5 inline-flex items-center justify-center text-sm font-bold text-forest bg-white hover:bg-sage-100 transition rounded-xl shadow-sm">
                             Masuk Portal
                         </a>
                     @endauth
@@ -145,15 +169,33 @@
                     <a href="{{ route('donations.index') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
                         Cari Donasi Pangan
                     </a>
-                    <a href="#tentang" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/80 hover:bg-forest-800">
-                        Tentang Satu Meja
-                    </a>
+                    @auth
+                        @if(auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
+                                Dasbor Admin
+                            </a>
+                        @elseif(auth()->user()->isPendonasi())
+                            <a href="{{ route('pendonasi.dashboard') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
+                                Dasbor Pendonasi
+                            </a>
+                        @else
+                            <a href="{{ route('penerima.dashboard') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
+                                Dasbor Penerima
+                            </a>
+                        @endif
+                    @endauth
                     <div class="pt-4 border-t border-forest-800 flex flex-col space-y-2">
                         @auth
                             <div class="px-4 py-2 text-white">
                                 <span class="text-xs text-sage block uppercase">{{ auth()->user()->role ?? 'Pengguna' }}</span>
                                 <span class="font-bold text-lg">{{ auth()->user()->name }}</span>
                             </div>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-red-300 font-bold">
+                                    Keluar Akun
+                                </button>
+                            </form>
                         @else
                             <a href="{{ route('login') }}" class="min-h-[44px] w-full text-center px-4 py-3 font-bold text-forest bg-white rounded-xl">
                                 Masuk Portal
@@ -169,6 +211,38 @@
     <main class="flex-1">
         @yield('content')
     </main>
+
+    <!-- Custom Animated Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
+        <div id="confirm-modal-card" class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-sage/30 transform scale-95 opacity-0 transition-all duration-300 space-y-5 text-center">
+            <!-- Animated Icon Badge -->
+            <div id="confirm-modal-icon" class="w-16 h-16 rounded-2xl bg-forest-50 text-forest flex items-center justify-center text-3xl mx-auto shadow-inner border border-sage/20 animate-bounce">
+                🤝
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-2">
+                <h3 id="confirm-modal-title" class="font-heading text-2xl font-bold text-forest">
+                    Konfirmasi Tindakan
+                </h3>
+                <p id="confirm-modal-message" class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                    Apakah Anda yakin ingin melanjutkan tindakan ini?
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-2 flex items-center gap-3">
+                <button type="button" id="confirm-modal-cancel"
+                        class="flex-1 min-h-[44px] px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 font-bold text-xs hover:bg-gray-100 transition focus:outline-none">
+                    Batal
+                </button>
+                <button type="button" id="confirm-modal-submit"
+                        class="flex-1 min-h-[44px] px-5 py-2.5 rounded-xl bg-forest hover:bg-forest-800 text-white font-bold text-xs shadow-md transition focus:outline-none">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer Section -->
     <footer class="bg-forest text-white border-t border-forest-800 mt-20">
@@ -223,6 +297,7 @@
         </div>
     </footer>
 
+    <!-- Global JavaScript Modal & Mobile Menu -->
     <script>
         // Mobile Menu Toggle
         const btn = id => document.getElementById(id);
@@ -234,6 +309,70 @@
                 mobileMenu.classList.toggle('hidden');
             });
         }
+
+        // Animated Custom Confirmation Modal System
+        window.showConfirmModal = function({
+            title = 'Konfirmasi Tindakan',
+            message = 'Apakah Anda yakin ingin melanjutkan?',
+            icon = '🤝',
+            confirmText = 'Ya, Lanjutkan',
+            cancelText = 'Batal',
+            confirmBtnClass = 'bg-forest hover:bg-forest-800 text-white',
+            onConfirm = () => {}
+        }) {
+            const modal = document.getElementById('confirm-modal');
+            const card = document.getElementById('confirm-modal-card');
+            const titleEl = document.getElementById('confirm-modal-title');
+            const msgEl = document.getElementById('confirm-modal-message');
+            const iconEl = document.getElementById('confirm-modal-icon');
+            const cancelBtn = document.getElementById('confirm-modal-cancel');
+            const submitBtn = document.getElementById('confirm-modal-submit');
+
+            if (!modal || !card) return;
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+            iconEl.textContent = icon;
+            cancelBtn.textContent = cancelText;
+            submitBtn.textContent = confirmText;
+            submitBtn.className = `flex-1 min-h-[44px] px-5 py-2.5 rounded-xl font-bold text-xs shadow-md transition focus:outline-none ${confirmBtnClass}`;
+
+            // Reveal modal with smooth animation
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            });
+
+            const closeModal = () => {
+                card.classList.remove('scale-100', 'opacity-100');
+                card.classList.add('scale-95', 'opacity-0');
+                modal.classList.add('opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            };
+
+            cancelBtn.onclick = closeModal;
+            submitBtn.onclick = () => {
+                closeModal();
+                onConfirm();
+            };
+
+            // Close on backdrop click or Escape key
+            modal.onclick = (e) => {
+                if (e.target === modal) closeModal();
+            };
+
+            const escHandler = (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    document.removeEventListener('keydown', escHandler);
+                }
+            };
+            document.addEventListener('keydown', escHandler);
+        };
     </script>
 </body>
 </html>
