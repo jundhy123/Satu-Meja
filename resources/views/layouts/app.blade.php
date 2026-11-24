@@ -41,6 +41,7 @@
                             DEFAULT: '#9A936E',
                             100: '#F4F3ED',
                         },
+                        tosca: '#1FD1A5',
                         page: '#F3F5F0',
                     },
                     fontFamily: {
@@ -51,6 +52,9 @@
             }
         }
     </script>
+
+    <!-- GSAP for Smooth Morphing & Stagger Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
     <style>
         body {
@@ -64,67 +68,29 @@
     </style>
 </head>
 <body class="bg-page text-gray-900 min-h-screen flex flex-col antialiased">
-    <!-- Navigation Header -->
-    <header class="bg-forest text-white shadow-md sticky top-0 z-50">
+    <!-- Transparent Header Bar (Logo Left, Auth Right) -->
+    <header class="absolute top-0 left-0 w-full text-white z-50 bg-transparent">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <!-- Brand / Logo -->
-                <a href="{{ route('home') }}" class="flex items-center gap-3 min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-sage rounded-lg px-2 py-1 transition">
-                    <div class="w-10 h-10 rounded-xl bg-sage flex items-center justify-center text-forest font-bold text-xl shadow-inner">
-                        <svg class="w-6 h-6 text-forest" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <!-- Brand / Logo Left -->
+                <a href="{{ route('home') }}" class="flex items-center gap-3 min-h-[44px] min-w-[44px] focus:outline-none rounded-lg px-2 py-1 transition group">
+                    <div class="w-10 h-10 rounded-xl bg-forest/80 backdrop-blur-md text-white flex items-center justify-center font-bold text-xl border border-white/20 shadow-lg group-hover:bg-forest transition">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                         </svg>
                     </div>
                     <div class="flex flex-col">
-                        <span class="font-heading text-2xl font-bold tracking-tight text-white leading-tight">Satu Meja</span>
-                        <span class="text-[10px] uppercase tracking-widest text-sage font-semibold">Zero Hunger Platform</span>
+                        <span class="font-heading text-2xl font-bold tracking-tight text-white leading-tight drop-shadow-md">Satu Meja</span>
+                        <span class="text-[10px] uppercase tracking-widest text-emerald-200 font-bold drop-shadow">Zero Hunger Platform</span>
                     </div>
                 </a>
 
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-2">
-                    <a href="{{ route('home') }}"
-                       class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('home') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
-                        Beranda
-                    </a>
-
-                    <a href="{{ route('donations.index') }}"
-                       class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('donations.*') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
-                        Cari Donasi
-                    </a>
-
+                <!-- Right Auth Action Button -->
+                <div class="flex items-center space-x-3">
                     @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}"
-                               class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('admin.*') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
-                                Dasbor Admin
-                            </a>
-                        @elseif(auth()->user()->isPendonasi())
-                            <a href="{{ route('pendonasi.dashboard') }}"
-                               class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('pendonasi.*') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
-                                Dasbor Pendonasi
-                            </a>
-                            @if(auth()->user()->status === 'verified')
-                                <a href="{{ route('pendonasi.donations.create') }}"
-                                   class="min-h-[44px] px-4 inline-flex items-center text-sm font-bold text-forest bg-sage hover:bg-sage-600 hover:text-white transition rounded-xl shadow-sm">
-                                    + Bagikan Pangan
-                                </a>
-                            @endif
-                        @else
-                            <a href="{{ route('penerima.dashboard') }}"
-                               class="min-h-[44px] px-4 inline-flex items-center text-sm font-semibold text-white hover:text-sage-200 transition rounded-lg {{ request()->routeIs('penerima.*') ? 'bg-forest-800 text-white shadow-inner' : '' }}">
-                                Dasbor Penerima
-                            </a>
-                        @endif
-                    @endauth
-                </div>
-
-                <!-- Right Action / Auth Buttons -->
-                <div class="hidden md:flex items-center space-x-3">
-                    @auth
-                        <div class="flex items-center gap-3 bg-forest-800/80 px-3 py-1.5 rounded-xl border border-sage/20">
+                        <div class="flex items-center gap-3 bg-black/50 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 shadow-lg">
                             <div class="flex flex-col text-right">
-                                <span class="text-[10px] text-sage font-medium uppercase tracking-wider">
+                                <span class="text-[10px] text-tosca font-semibold uppercase tracking-wider">
                                     {{ auth()->user()->role ?? 'Pengguna' }} ({{ auth()->user()->status }})
                                 </span>
                                 <span class="text-xs font-bold text-white leading-tight">
@@ -134,74 +100,17 @@
                             <form action="{{ route('logout') }}" method="POST" class="inline">
                                 @csrf
                                 <button type="submit" title="Keluar Akun"
-                                        class="min-h-[36px] px-3 py-1 inline-flex items-center text-xs font-bold text-white/90 bg-red-600/80 hover:bg-red-700 rounded-lg transition">
+                                        class="min-h-[36px] px-3 py-1 inline-flex items-center text-xs font-bold text-white bg-red-600/90 hover:bg-red-700 rounded-lg transition shadow">
                                     Keluar
                                 </button>
                             </form>
                         </div>
                     @else
                         <a href="{{ route('login') }}"
-                           class="min-h-[44px] px-5 inline-flex items-center justify-center text-sm font-bold text-forest bg-white hover:bg-sage-100 transition rounded-xl shadow-sm">
+                           class="min-h-[44px] px-5 inline-flex items-center justify-center text-sm font-bold text-forest bg-white hover:bg-sage-100 transition rounded-xl shadow-lg focus:outline-none">
                             Masuk Portal
                         </a>
                     @endauth
-                </div>
-
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button type="button" id="mobile-menu-btn"
-                            class="min-h-[44px] min-w-[44px] inline-flex items-center justify-center p-2 rounded-xl text-sage hover:text-white hover:bg-forest-800 focus:outline-none focus:ring-2 focus:ring-sage"
-                            aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Buka menu utama</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile Navigation Menu -->
-            <div class="hidden md:hidden pb-6 pt-2 border-t border-forest-800" id="mobile-menu">
-                <div class="flex flex-col space-y-2">
-                    <a href="{{ route('home') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white bg-forest-800">
-                        Beranda
-                    </a>
-                    <a href="{{ route('donations.index') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
-                        Cari Donasi Pangan
-                    </a>
-                    @auth
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
-                                Dasbor Admin
-                            </a>
-                        @elseif(auth()->user()->isPendonasi())
-                            <a href="{{ route('pendonasi.dashboard') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
-                                Dasbor Pendonasi
-                            </a>
-                        @else
-                            <a href="{{ route('penerima.dashboard') }}" class="min-h-[44px] px-4 py-2 rounded-lg text-base font-semibold text-white/90 hover:bg-forest-800">
-                                Dasbor Penerima
-                            </a>
-                        @endif
-                    @endauth
-                    <div class="pt-4 border-t border-forest-800 flex flex-col space-y-2">
-                        @auth
-                            <div class="px-4 py-2 text-white">
-                                <span class="text-xs text-sage block uppercase">{{ auth()->user()->role ?? 'Pengguna' }}</span>
-                                <span class="font-bold text-lg">{{ auth()->user()->name }}</span>
-                            </div>
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2 text-red-300 font-bold">
-                                    Keluar Akun
-                                </button>
-                            </form>
-                        @else
-                            <a href="{{ route('login') }}" class="min-h-[44px] w-full text-center px-4 py-3 font-bold text-forest bg-white rounded-xl">
-                                Masuk Portal
-                            </a>
-                        @endauth
-                    </div>
                 </div>
             </div>
         </nav>
@@ -297,19 +206,8 @@
         </div>
     </footer>
 
-    <!-- Global JavaScript Modal & Mobile Menu -->
+    <!-- Global JavaScript Modal -->
     <script>
-        // Mobile Menu Toggle
-        const btn = id => document.getElementById(id);
-        const mobileBtn = btn('mobile-menu-btn');
-        const mobileMenu = btn('mobile-menu');
-
-        if (mobileBtn && mobileMenu) {
-            mobileBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
         // Animated Custom Confirmation Modal System
         window.showConfirmModal = function({
             title = 'Konfirmasi Tindakan',

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicDonationController;
 
-// 1. Halaman Beranda Utama
+// 1. Halaman Beranda Utama Satu Meja (Interaktif Hello Monday Aesthetic)
 Route::get('/', function () {
     $latestDonations = collect();
     $stats = [
