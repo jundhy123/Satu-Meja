@@ -80,26 +80,33 @@
                 <!-- Right Auth Action Button -->
                 <div class="flex items-center space-x-3">
                     @auth
-                        <div class="flex items-center gap-3 bg-black/50 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/20 shadow-lg">
-                            <div class="flex flex-col text-right">
-                                <span class="text-[10px] text-tosca font-semibold uppercase tracking-wider">
-                                    {{ auth()->user()->role ?? 'Pengguna' }} ({{ auth()->user()->status }})
-                                </span>
-                                <span class="text-xs font-bold text-white leading-tight">
+                        <div class="relative group">
+                            <!-- Minimalist Main Pill (User Name & Logout Button ">") -->
+                            <div class="flex items-center gap-3 bg-forest-900/85 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl cursor-pointer hover:border-tosca/50 transition-all duration-300">
+                                <span class="text-xs font-bold text-white tracking-tight max-w-[160px] sm:max-w-[200px] truncate leading-tight">
                                     {{ auth()->user()->institution_name ?? auth()->user()->name }}
                                 </span>
+
+                                <form action="{{ route('logout') }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" title="Keluar Akun"
+                                            class="w-7 h-7 rounded-xl bg-red-600 hover:bg-red-500 text-white font-extrabold text-sm flex items-center justify-center transition-all duration-200 shadow hover:scale-110 active:scale-95 focus:outline-none">
+                                        &gt;
+                                    </button>
+                                </form>
                             </div>
-                            <form action="{{ route('logout') }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" title="Keluar Akun"
-                                        class="min-h-[36px] px-3 py-1 inline-flex items-center text-xs font-bold text-white bg-red-600/90 hover:bg-red-700 rounded-lg transition shadow">
-                                    Keluar
-                                </button>
-                            </form>
+
+                            <!-- Minimalist Hover Dropdown (Only Shows Role Status) -->
+                            <div class="absolute right-0 top-full mt-2 bg-forest-900/95 backdrop-blur-xl border border-white/20 rounded-xl px-4 py-2.5 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-1 group-hover:translate-y-0 z-50 whitespace-nowrap">
+                                <span class="text-xs font-bold text-white flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-tosca shadow-[0_0_6px_#1FD1A5] animate-pulse"></span>
+                                    <span>Status: {{ ucfirst(auth()->user()->role) }}</span>
+                                </span>
+                            </div>
                         </div>
                     @else
                         <a href="{{ route('login') }}"
-                           class="min-h-[44px] px-5 inline-flex items-center justify-center text-sm font-bold text-forest bg-white hover:bg-sage-100 transition rounded-xl shadow-lg focus:outline-none">
+                           class="min-h-[44px] px-6 py-2.5 inline-flex items-center justify-center text-xs font-bold text-forest bg-white hover:bg-sage-100 transition rounded-2xl shadow-lg border border-white/20 hover:scale-105 active:scale-95 focus:outline-none">
                             Masuk Portal
                         </a>
                     @endauth

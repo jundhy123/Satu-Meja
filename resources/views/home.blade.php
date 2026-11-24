@@ -16,6 +16,15 @@
         <!-- Soft subtle top/bottom gradient overlay for text readability -->
         <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/40 pointer-events-none"></div>
     </div>
+
+    <!-- Centered Typewriter Text Container (Positioned right under the large "Satu Meja" in the final frame) -->
+    <div class="relative z-10 my-auto flex flex-col items-center justify-center text-center px-6 pt-36 sm:pt-48 pointer-events-none">
+        <div id="typewriter-container" class="opacity-0 transition-opacity duration-700 max-w-3xl mx-auto">
+            <p class="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-forest-900 tracking-wide leading-relaxed drop-shadow-sm">
+                <span id="typed-content"></span><span id="typewriter-cursor" class="inline-block w-0.5 h-6 sm:h-8 bg-forest-900 ml-1 animate-pulse">|</span>
+            </p>
+        </div>
+    </div>
 </section>
 
 
@@ -256,16 +265,37 @@
 
 
 <!-- ================================================================= -->
-<!-- JAVASCRIPT FOR HERO VIDEO CONTROLS                                -->
+<!-- JAVASCRIPT FOR HERO VIDEO & TYPEWRITER ANIMATION                  -->
 <!-- ================================================================= -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Hero Video End Listener & Play Trigger
         const bgVideo = document.getElementById('hero-bg-video');
+        const typewriterContainer = document.getElementById('typewriter-container');
+        const typedContent = document.getElementById('typed-content');
+        const textToType = "Platform Kolaborasi Berbagi Pangan & Mewujudkan Zero Hunger";
+
+        function startTypewriter() {
+            if (!typedContent || !typewriterContainer) return;
+            typewriterContainer.classList.remove('opacity-0');
+            typedContent.textContent = '';
+            let index = 0;
+            const speed = 40; // Kecepatan mengetik per karakter (ms)
+
+            function typeChar() {
+                if (index < textToType.length) {
+                    typedContent.textContent += textToType.charAt(index);
+                    index++;
+                    setTimeout(typeChar, speed);
+                }
+            }
+            typeChar();
+        }
+
         if (bgVideo) {
             bgVideo.play().catch(err => console.log('Autoplay handled:', err));
             bgVideo.addEventListener('ended', () => {
-                bgVideo.pause(); // Hold cleanly on final frame ("Satu Meja")
+                bgVideo.pause(); // Tahan pada frame terakhir ("Satu Meja")
+                startTypewriter(); // Mulai efek mengetik dari nol saat video selesai
             });
         }
     });
