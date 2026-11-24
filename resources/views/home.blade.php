@@ -6,7 +6,7 @@
 <!-- ================================================================= -->
 <!-- HERO SECTION WITH CLEAN FULL VIDEO BACKGROUND                     -->
 <!-- ================================================================= -->
-<section class="relative w-full h-[88vh] flex flex-col justify-between overflow-hidden bg-black text-white">
+<section class="relative w-full h-screen flex flex-col justify-between overflow-hidden bg-black text-white">
     <!-- Clean Video Background (Natural Crisp Colors, Asset URL) -->
     <div class="absolute inset-0 z-0 bg-black">
         <video id="hero-bg-video" class="w-full h-full object-cover transition-opacity duration-700" autoplay muted playsinline preload="auto">
@@ -15,133 +15,6 @@
         </video>
         <!-- Soft subtle top/bottom gradient overlay for text readability -->
         <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/40 pointer-events-none"></div>
-    </div>
-
-    <!-- Sub-Header Bar (Minimalist: Subtheme Badge Left & Days Counter Right) -->
-    <div class="relative z-10 max-w-7xl mx-auto w-full px-6 pt-24 flex items-center justify-between pointer-events-none">
-        <!-- Brand Subtheme Badge -->
-        <div class="pointer-events-auto flex items-center gap-2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-xs font-bold text-white shadow-xl">
-            <span>🌱 Subtema Zero Hunger (SDG 2)</span>
-        </div>
-
-        <!-- Days Counter Pill -->
-        <div id="hm-days-counter" class="pointer-events-auto flex items-center gap-2 text-xs font-semibold text-white bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 shadow-xl">
-            <span class="w-2.5 h-2.5 rounded-full bg-tosca animate-ping"></span>
-            <span id="days-until-monday">Calculating days...</span>
-        </div>
-    </div>
-
-
-    <!-- Dynamic Hover Curved Wave Sidebar Trigger (Floating Icon Default -> Wave on Hover) -->
-    <div id="hm-curved-tab" class="fixed right-0 top-1/2 -translate-y-1/2 z-40 h-[65vh] w-28 flex items-center justify-end pointer-events-auto group cursor-pointer">
-        <!-- SVG Curved Background Wave (Smoothly expands on hover) -->
-        <svg id="hm-tab-svg" class="absolute right-0 top-0 h-full w-28 text-forest drop-shadow-2xl transition-all duration-500 ease-out opacity-0 group-hover:opacity-100 transform origin-right scale-x-75 group-hover:scale-x-100"
-             viewBox="0 0 100 600" preserveAspectRatio="none" aria-label="Open menu" role="button" tabindex="0">
-            <path id="hm-tab-path" class="transition-all duration-500" fill="currentColor"
-                  d="M 100 0 C 100 150, 100 200, 100 300 C 100 400, 100 450, 100 600 L 100 0 Z" />
-        </svg>
-
-        <!-- Floating Circular Icon Button (Always Visible) -->
-        <button id="hm-menu-btn" type="button"
-                class="relative z-50 mr-4 w-12 h-12 rounded-full bg-forest text-white shadow-2xl flex items-center justify-center border border-white/20 group-hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-tosca"
-                aria-label="Open menu" aria-expanded="false">
-            <svg id="hm-hamburger-icon" class="w-6 h-6 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 8h16M4 16h16"></path>
-            </svg>
-            <svg id="hm-close-icon" class="w-6 h-6 hidden transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </button>
-    </div>
-
-
-    <!-- Fullscreen Menu Overlay (Replaces 100% Screen Seamlessly, Uniform Solid Forest Green) -->
-    <div id="hm-menu-overlay" class="fixed inset-0 z-50 bg-forest text-white flex flex-col justify-between p-8 sm:p-14 hidden opacity-0 transition-opacity duration-300 pointer-events-auto">
-        <!-- Top Overlay Header -->
-        <div class="max-w-7xl mx-auto w-full flex items-center justify-between border-b border-white/10 pb-6">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-sage flex items-center justify-center text-forest font-bold text-xl shadow-inner">
-                    🌱
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-heading text-2xl font-bold tracking-tight text-white leading-tight">Satu Meja</span>
-                    <span class="text-[10px] uppercase tracking-widest text-tosca font-bold">Zero Hunger Platform</span>
-                </div>
-            </div>
-
-            <!-- Close Button -->
-            <button type="button" id="hm-close-overlay-btn" class="w-12 h-12 rounded-full bg-forest-800 text-white flex items-center justify-center border border-white/20 hover:bg-forest-900 transition focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Center Menu Nav Links -->
-        <div class="max-w-7xl mx-auto w-full my-auto py-8">
-            <nav aria-label="Main Fullscreen Menu">
-                <ul class="space-y-6">
-                    <li class="hm-menu-item">
-                        <a href="{{ route('home') }}" class="group inline-flex items-center text-3xl sm:text-5xl font-heading text-white hover:text-tosca transition-all duration-300">
-                            <span class="opacity-0 group-hover:opacity-100 -ml-8 mr-3 font-mono text-tosca text-3xl transition-all duration-300">—</span>
-                            <span class="transform group-hover:translate-x-3 transition-transform duration-300">Beranda</span>
-                        </a>
-                    </li>
-                    <li class="hm-menu-item">
-                        <a href="{{ route('donations.index') }}" class="group inline-flex items-center text-3xl sm:text-5xl font-heading text-white hover:text-tosca transition-all duration-300">
-                            <span class="opacity-0 group-hover:opacity-100 -ml-8 mr-3 font-mono text-tosca text-3xl transition-all duration-300">—</span>
-                            <span class="transform group-hover:translate-x-3 transition-transform duration-300">Cari Donasi Pangan</span>
-                        </a>
-                    </li>
-
-                    @auth
-                        <li class="hm-menu-item">
-                            <a href="{{ route(auth()->user()->isAdmin() ? 'admin.dashboard' : (auth()->user()->isPendonasi() ? 'pendonasi.dashboard' : 'penerima.dashboard')) }}"
-                               class="group inline-flex items-center text-3xl sm:text-5xl font-heading text-white hover:text-tosca transition-all duration-300">
-                                <span class="opacity-0 group-hover:opacity-100 -ml-8 mr-3 font-mono text-tosca text-3xl transition-all duration-300">—</span>
-                                <span class="transform group-hover:translate-x-3 transition-transform duration-300">
-                                    Dasbor {{ ucfirst(auth()->user()->role) }}
-                                </span>
-                            </a>
-                        </li>
-
-                        @if(auth()->user()->isPendonasi() && auth()->user()->status === 'verified')
-                            <li class="hm-menu-item">
-                                <a href="{{ route('pendonasi.donations.create') }}" class="group inline-flex items-center text-2xl sm:text-4xl font-heading text-tosca hover:text-white transition-all duration-300">
-                                    <span class="opacity-0 group-hover:opacity-100 -ml-8 mr-3 font-mono text-white text-3xl transition-all duration-300">—</span>
-                                    <span class="transform group-hover:translate-x-3 transition-transform duration-300">+ Bagikan Pangan Berlebih</span>
-                                </a>
-                            </li>
-                        @endif
-                    @else
-                        <li class="hm-menu-item">
-                            <a href="{{ route('login') }}" class="group inline-flex items-center text-3xl sm:text-5xl font-heading text-white hover:text-tosca transition-all duration-300">
-                                <span class="opacity-0 group-hover:opacity-100 -ml-8 mr-3 font-mono text-tosca text-3xl transition-all duration-300">—</span>
-                                <span class="transform group-hover:translate-x-3 transition-transform duration-300">Masuk Portal Pengguna</span>
-                            </a>
-                        </li>
-                    @endauth
-
-                    <li class="hm-menu-item">
-                        <a href="#tentang" onclick="closeHmMenu()" class="group inline-flex items-center text-2xl sm:text-4xl font-heading text-sage-200 hover:text-white transition-all duration-300">
-                            <span class="opacity-0 group-hover:opacity-100 -ml-8 mr-3 font-mono text-tosca text-2xl transition-all duration-300">—</span>
-                            <span class="transform group-hover:translate-x-3 transition-transform duration-300">Filosofi Satu Meja</span>
-                        </a>
-                    </li>
-                    <li class="hm-menu-item">
-                        <a href="#cara-kerja" onclick="closeHmMenu()" class="group inline-flex items-center text-2xl sm:text-4xl font-heading text-sage-200 hover:text-white transition-all duration-300">
-                            <span class="opacity-0 group-hover:opacity-100 -ml-8 mr-3 font-mono text-tosca text-2xl transition-all duration-300">—</span>
-                            <span class="transform group-hover:translate-x-3 transition-transform duration-300">Alur Cara Kerja</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-
-        <!-- Bottom Footer Info -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-            <p>&copy; {{ date('Y') }} Satu Meja - Kolaborasi Pangan Layak Konsumsi</p>
-        </div>
     </div>
 </section>
 
@@ -383,11 +256,11 @@
 
 
 <!-- ================================================================= -->
-<!-- JAVASCRIPT FOR VIDEO CONTROLS & DYNAMIC HOVER WAVE               -->
+<!-- JAVASCRIPT FOR HERO VIDEO CONTROLS                                -->
 <!-- ================================================================= -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // 1. Video End Listener & Play Trigger
+        // Hero Video End Listener & Play Trigger
         const bgVideo = document.getElementById('hero-bg-video');
         if (bgVideo) {
             bgVideo.play().catch(err => console.log('Autoplay handled:', err));
@@ -395,111 +268,6 @@
                 bgVideo.pause(); // Hold cleanly on final frame ("Satu Meja")
             });
         }
-
-        // 2. Days Until Monday Calculator
-        function calcDaysUntilMonday() {
-            const today = new Date();
-            const day = today.getDay(); // 0: Sun, 1: Mon, ...
-            const daysLeft = (8 - day) % 7;
-            const text = daysLeft === 0 ? "Today is Monday!" : `${daysLeft} days until Monday`;
-            const el = document.getElementById('days-until-monday');
-            if (el) el.textContent = text;
-        }
-        calcDaysUntilMonday();
-
-
-        // 3. Dynamic Smooth Wave Morphing on Hover (GSAP Morph)
-        const curvedTabContainer = document.getElementById('hm-curved-tab');
-        const tabPath = document.getElementById('hm-tab-path');
-
-        const flatPath = "M 100 0 C 100 150, 100 200, 100 300 C 100 400, 100 450, 100 600 L 100 0 Z";
-        const wavePath = "M 100 0 C 100 150, 15 200, 15 300 C 15 400, 100 450, 100 600 L 100 0 Z";
-
-        if (curvedTabContainer && tabPath) {
-            curvedTabContainer.addEventListener('mouseenter', () => {
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(tabPath, {
-                        attr: { d: wavePath },
-                        duration: 0.6,
-                        ease: "power3.out"
-                    });
-                }
-            });
-
-            curvedTabContainer.addEventListener('mouseleave', () => {
-                if (!isHmMenuOpen && typeof gsap !== 'undefined') {
-                    gsap.to(tabPath, {
-                        attr: { d: flatPath },
-                        duration: 0.5,
-                        ease: "power2.inOut"
-                    });
-                }
-            });
-        }
-
-
-        // 4. Seamless Fullscreen Overlay Menu Logic
-        let isHmMenuOpen = false;
-        const menuBtn = document.getElementById('hm-menu-btn');
-        const hamburgerIcon = document.getElementById('hm-hamburger-icon');
-        const closeIcon = document.getElementById('hm-close-icon');
-        const closeOverlayBtn = document.getElementById('hm-close-overlay-btn');
-        const overlay = document.getElementById('hm-menu-overlay');
-
-        window.openHmMenu = function() {
-            if (!overlay) return;
-            isHmMenuOpen = true;
-            if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
-            overlay.classList.remove('hidden');
-
-            requestAnimationFrame(() => {
-                overlay.classList.remove('opacity-0');
-            });
-
-            if (hamburgerIcon) hamburgerIcon.classList.add('hidden');
-            if (closeIcon) closeIcon.classList.remove('hidden');
-        };
-
-        window.closeHmMenu = function() {
-            if (!overlay) return;
-            isHmMenuOpen = false;
-            if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
-
-            overlay.classList.add('opacity-0');
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-            }, 300);
-
-            if (closeIcon) closeIcon.classList.add('hidden');
-            if (hamburgerIcon) hamburgerIcon.classList.remove('hidden');
-
-            if (typeof gsap !== 'undefined' && tabPath) {
-                gsap.to(tabPath, {
-                    attr: { d: flatPath },
-                    duration: 0.4,
-                    ease: "power2.inOut"
-                });
-            }
-        };
-
-        if (curvedTabContainer) {
-            curvedTabContainer.addEventListener('click', () => {
-                if (!isHmMenuOpen) openHmMenu(); else closeHmMenu();
-            });
-        }
-
-        if (closeOverlayBtn) {
-            closeOverlayBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                closeHmMenu();
-            });
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && isHmMenuOpen) {
-                closeHmMenu();
-            }
-        });
     });
 </script>
 @endsection

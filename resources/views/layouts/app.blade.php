@@ -68,21 +68,13 @@
     </style>
 </head>
 <body class="bg-page text-gray-900 min-h-screen flex flex-col antialiased">
-    <!-- Transparent Header Bar (Logo Left, Auth Right) -->
-    <header class="absolute top-0 left-0 w-full text-white z-50 bg-transparent">
+    <!-- Header Bar (Logo Left, Auth Right) -->
+    <header class="{{ request()->routeIs('home') ? 'absolute top-0 left-0 w-full text-white z-50 bg-transparent' : 'sticky top-0 w-full text-white z-50 bg-forest shadow-md border-b border-forest-800' }}">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Brand / Logo Left -->
                 <a href="{{ route('home') }}" class="flex items-center gap-3 min-h-[44px] min-w-[44px] focus:outline-none rounded-lg px-2 py-1 transition group">
-                    <div class="w-10 h-10 rounded-xl bg-forest/80 backdrop-blur-md text-white flex items-center justify-center font-bold text-xl border border-white/20 shadow-lg group-hover:bg-forest transition">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                        </svg>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="font-heading text-2xl font-bold tracking-tight text-white leading-tight drop-shadow-md">Satu Meja</span>
-                        <span class="text-[10px] uppercase tracking-widest text-emerald-200 font-bold drop-shadow">Zero Hunger Platform</span>
-                    </div>
+                    <span class="font-heading text-2xl font-bold tracking-tight text-white leading-tight drop-shadow-md">Satu Meja</span>
                 </a>
 
                 <!-- Right Auth Action Button -->
@@ -115,6 +107,9 @@
             </div>
         </nav>
     </header>
+
+    <!-- Global Floating Sidebar & Overlay Menu -->
+    @include('partials.sidebar')
 
     <!-- Main Content -->
     <main class="flex-1">
@@ -160,11 +155,6 @@
                 <!-- Col 1: About -->
                 <div class="md:col-span-2 space-y-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-sage flex items-center justify-center text-forest font-bold text-xl">
-                            <svg class="w-6 h-6 text-forest" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                            </svg>
-                        </div>
                         <span class="font-heading text-2xl font-bold text-white">Satu Meja</span>
                     </div>
                     <p class="text-sm text-sage-100 max-w-md leading-relaxed">
