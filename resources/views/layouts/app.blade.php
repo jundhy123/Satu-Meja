@@ -81,11 +81,13 @@
                 <div class="flex items-center space-x-3">
                     @auth
                         <div class="relative group">
-                            <!-- Minimalist Main Pill (User Name & Logout Button ">") -->
-                            <div class="flex items-center gap-3 bg-forest-900/85 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl cursor-pointer hover:border-tosca/50 transition-all duration-300">
-                                <span class="text-xs font-bold text-white tracking-tight max-w-[160px] sm:max-w-[200px] truncate leading-tight">
-                                    {{ auth()->user()->institution_name ?? auth()->user()->name }}
-                                </span>
+                            <!-- Main Pill (Klik nama untuk ke Profil, klik ">" untuk Logout) -->
+                            <div class="flex items-center gap-3 bg-forest-900/85 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/20 shadow-xl hover:border-tosca/50 transition-all duration-300">
+                                <a href="{{ route('profile.show') }}" title="Buka Pengaturan Profil"
+                                   class="text-xs font-bold text-white hover:text-tosca tracking-tight max-w-[160px] sm:max-w-[200px] truncate leading-tight flex items-center gap-1.5 transition">
+                                    <span>👤</span>
+                                    <span>{{ auth()->user()->institution_name ?? auth()->user()->name }}</span>
+                                </a>
 
                                 <form action="{{ route('logout') }}" method="POST" class="inline">
                                     @csrf

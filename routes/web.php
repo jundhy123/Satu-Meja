@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicDonationController;
+use App\Http\Controllers\ProfileController;
 
 // 1. Halaman Beranda Utama Satu Meja (Interaktif Hello Monday Aesthetic)
 Route::get('/', function () {
@@ -37,6 +38,11 @@ Route::get('/', function () {
 // 2. Public Donation Search & Detail
 Route::get('/donasi', [PublicDonationController::class, 'index'])->name('donations.index');
 Route::get('/api/donations/active', [PublicDonationController::class, 'activeJson'])->name('donations.json');
+Route::middleware('auth')->group(function () {
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+});
 
 // 3. Load Modular Route Files (Sesuai Aturan Kerja Tim)
 require __DIR__ . '/auth.php';

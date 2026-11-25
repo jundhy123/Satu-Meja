@@ -156,6 +156,15 @@
             </div>
 
             <div>
+                <label for="description" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Deskripsi Singkat Usaha / Lembaga <span class="text-gray-400 font-normal">(Opsional)</span>
+                </label>
+                <textarea id="description" name="description" rows="2"
+                          class="w-full px-4 py-2.5 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-forest"
+                          placeholder="Ceritakan singkat mengenai aktivitas usaha atau lembaga sosial Anda">{{ old('description') }}</textarea>
+            </div>
+
+            <div>
                 <button type="submit"
                         class="w-full min-h-[48px] px-6 py-3.5 inline-flex items-center justify-center text-sm font-bold text-white bg-forest hover:bg-forest-800 rounded-xl shadow-md transition focus:outline-none focus:ring-2 focus:ring-forest">
                     Daftar Akun Baru

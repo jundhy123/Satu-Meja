@@ -66,11 +66,12 @@ class AuthController extends Controller
             'pic_name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:50'],
             'address' => ['required', 'string'],
+            'description' => ['nullable', 'string', 'max:1000'],
         ]);
 
         $user = User::create([
             'role' => $validated['role'],
-            'status' => 'pending', // Initial status is pending verification
+            'status' => 'pending',
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
@@ -79,6 +80,7 @@ class AuthController extends Controller
             'pic_name' => $validated['pic_name'],
             'phone' => $validated['phone'],
             'address' => $validated['address'],
+            'description' => $validated['description'] ?? null,
         ]);
 
         Auth::login($user);
