@@ -26,7 +26,7 @@
             </div>
         @endif
 
-        <form class="space-y-6" action="{{ route('pendonasi.donations.store') }}" method="POST">
+        <form class="space-y-6" action="{{ route('pendonasi.donations.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <!-- Title & Food Type -->
@@ -127,6 +127,32 @@
                 </div>
             </div>
 
+            <!-- Upload Foto Produk Makanan -->
+            <div>
+                <label for="photo" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    Foto Paket Makanan (Opsional)
+                </label>
+                <div class="mt-1 flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-xl border border-dashed border-sage/60 bg-page/50">
+                    <div id="photo-preview-wrapper" class="hidden shrink-0">
+                        <img id="photo-preview" src="#" alt="Preview foto paket makanan"
+                             class="w-24 h-24 object-cover rounded-xl border border-sage/30 shadow-sm">
+                    </div>
+
+                    <div class="flex-1 space-y-1.5">
+                        <input id="photo" name="photo" type="file" accept="image/png,image/jpeg,image/webp"
+                               class="block w-full text-xs text-gray-700
+                                      file:mr-4 file:min-h-[44px] file:px-4 file:py-2.5
+                                      file:rounded-xl file:border-0
+                                      file:text-xs file:font-bold
+                                      file:bg-forest file:text-white
+                                      hover:file:bg-forest-800 file:cursor-pointer cursor-pointer">
+                        <p class="text-[11px] text-gray-500">
+                            Format: JPG, PNG, atau WEBP. Maksimal 2 MB. Foto membantu penerima memastikan kondisi makanan.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Descriptions & Allergen / Storage Notes -->
             <div>
                 <label for="description" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
@@ -170,4 +196,24 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('photo').addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        const wrapper = document.getElementById('photo-preview-wrapper');
+        const preview = document.getElementById('photo-preview');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                wrapper.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '#';
+            wrapper.classList.add('hidden');
+        }
+    });
+</script>
 @endsection

@@ -177,55 +177,75 @@
         </div>
 
         @if(isset($latestDonations) && $latestDonations->count() > 0)
-            <!-- Grid Donasi Aktif -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Grid Donasi Aktif (Diperkecil & Ditambah Foto) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
                 @foreach($latestDonations as $donation)
-                    <div class="bg-page rounded-3xl p-6 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="bg-page rounded-2xl p-4 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition group">
                         <div class="space-y-3">
-                            <div class="flex items-center justify-between">
-                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-sage-100 text-forest border border-sage/30">
+                            
+                            <!-- Foto Produk Makanan (Ringkas & Proporsional) -->
+                            @if($donation->photo)
+                                <div class="w-full aspect-[4/3] overflow-hidden rounded-xl border border-sage/10 bg-white relative flex items-center justify-center p-2">
+                                    <img src="{{ asset('storage/' . $donation->photo) }}"
+                                         alt="Foto {{ $donation->title }}"
+                                         class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                            @else
+                                <div class="w-full aspect-[4/3] rounded-xl border border-sage/20 bg-sage-100/40 flex flex-col items-center justify-center text-forest/60 gap-1">
+                                    <span class="text-2xl" aria-hidden="true">🍱</span>
+                                    <span class="text-[10px] font-semibold">Tanpa Foto</span>
+                                </div>
+                            @endif
+
+                            <!-- Badges -->
+                            <div class="flex flex-wrap items-center justify-between gap-1.5">
+                                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-sage-100 text-forest border border-sage/30">
                                     {{ $donation->food_type ?? 'Pangan Berlebih' }}
                                 </span>
                                 @if(\Carbon\Carbon::parse($donation->deadline)->diffInHours(now()) <= 48)
-                                    <span class="px-2.5 py-0.5 rounded text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                                        Segera Kedaluwarsa
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                        Urgent
                                     </span>
                                 @else
-                                    <span class="px-2.5 py-0.5 rounded text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                                         Tersedia
                                     </span>
                                 @endif
                             </div>
 
-                            <h3 class="font-heading text-lg font-bold text-gray-900 leading-snug">
-                                {{ $donation->title }}
-                            </h3>
+                            <!-- Title & Desc -->
+                            <div>
+                                <h3 class="font-heading text-sm sm:text-base font-bold text-gray-900 leading-tight line-clamp-2 group-hover:text-forest transition-colors">
+                                    {{ $donation->title }}
+                                </h3>
+                                <p class="text-[11px] text-gray-600 line-clamp-2 mt-1">
+                                    {{ $donation->description ?? 'Tidak ada deskripsi tambahan.' }}
+                                </p>
+                            </div>
 
-                            <p class="text-xs text-gray-600 line-clamp-2">
-                                {{ $donation->description ?? 'Tidak ada deskripsi tambahan.' }}
-                            </p>
-
-                            <div class="space-y-1.5 pt-2 border-t border-sage/20 text-xs text-gray-700">
+                            <!-- Info Details (Grid rapi) -->
+                            <div class="space-y-1.5 pt-2 border-t border-sage/20 text-[11px] text-gray-700">
                                 <div class="flex items-center justify-between">
                                     <span class="font-semibold text-gray-500">Jumlah Porsi:</span>
                                     <span class="font-bold text-forest">{{ $donation->quantity ?? '-' }}</span>
                                 </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="font-semibold text-gray-500">Lokasi:</span>
-                                    <span class="font-medium text-gray-800">{{ $donation->location }}</span>
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="font-semibold text-gray-500 shrink-0">Lokasi:</span>
+                                    <span class="font-medium text-gray-800 text-right truncate" title="{{ $donation->location }}">{{ $donation->location }}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="font-semibold text-gray-500">Batas Waktu:</span>
-                                    <span class="font-mono text-forest font-bold">
+                                    <span class="font-mono text-forest font-bold bg-forest/5 px-1.5 py-0.5 rounded text-[10px]">
                                         {{ \Carbon\Carbon::parse($donation->deadline)->format('d M Y H:i') }}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="pt-5 mt-4 border-t border-sage/20">
+                        <!-- Button -->
+                        <div class="pt-4 mt-3 border-t border-sage/20">
                             <a href="{{ route('donations.index') }}"
-                               class="w-full min-h-[44px] px-4 py-2.5 inline-flex items-center justify-center text-xs font-bold text-white bg-forest hover:bg-forest-800 rounded-xl transition">
+                               class="w-full min-h-[38px] px-3 py-2 inline-flex items-center justify-center text-[11px] font-bold text-white bg-forest hover:bg-forest-800 rounded-lg transition-colors shadow-sm">
                                 Detail & Klaim Donasi
                             </a>
                         </div>

@@ -58,7 +58,13 @@ class PendonasiController extends Controller
             'description' => ['nullable', 'string'],
             'allergen_notes' => ['nullable', 'string'],
             'storage_notes' => ['nullable', 'string'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
+
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('donations', 'public');
+        }
 
         $deadlineTime = Carbon::parse($validated['deadline']);
 
@@ -69,6 +75,7 @@ class PendonasiController extends Controller
             'user_id' => $user->id,
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
+            'photo' => $photoPath,
             'food_type' => $validated['food_type'],
             'quantity' => $validated['quantity'],
             'delivery_method' => $validated['delivery_method'],

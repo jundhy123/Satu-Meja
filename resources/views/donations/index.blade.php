@@ -3,46 +3,48 @@
 @section('title', 'Cari Donasi Pangan - Satu Meja')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-    <!-- Header Banner -->
-    <div class="bg-forest text-white rounded-3xl p-8 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 border border-sage/20">
-        <div class="space-y-2">
-            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-sage/30 text-sage-200 border border-sage/40">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <!-- Header Banner (Diperkecil padding-nya) -->
+    <div class="bg-forest text-white rounded-2xl p-6 sm:p-8 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 border border-sage/20 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-sage/10 rounded-full blur-2xl pointer-events-none"></div>
+        
+        <div class="space-y-2 relative z-10">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-sage/30 text-sage-200 border border-sage/40">
                 Pencarian Pangan Terverifikasi
             </span>
-            <h1 class="font-heading text-3xl sm:text-4xl font-extrabold">Cari Donasi Pangan Layak Konsumsi</h1>
-            <p class="text-xs sm:text-sm text-sage-100 max-w-2xl">
-                Temukan makanan berlebih dari pelaku usaha pangan terpercaya di sekitarmu. Hanya makanan aktif sebelum batas waktu kedaluwarsa yang ditampilkan.
+            <h1 class="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight">Cari Donasi Pangan Layak Konsumsi</h1>
+            <p class="text-xs sm:text-sm text-sage-100 max-w-2xl leading-relaxed">
+                Temukan makanan berlebih dari pelaku usaha pangan terpercaya di sekitarmu.
             </p>
         </div>
 
-        <div class="flex items-center gap-2 bg-forest-800/80 px-4 py-2 rounded-2xl border border-sage/30 text-xs text-sage-200">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Pengecekan Otomatis 15 Detik</span>
+        <div class="flex items-center gap-2 bg-forest-800/80 backdrop-blur-sm px-4 py-2 rounded-xl border border-sage/30 text-[11px] sm:text-xs text-sage-200 self-start md:self-auto shrink-0 relative z-10 shadow-inner">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+            <span class="font-medium">Pengecekan Otomatis 15 Detik</span>
         </div>
     </div>
 
     <!-- Alerts -->
     @if(session('success'))
-        <div class="bg-emerald-50 border border-emerald-200 text-emerald-900 px-5 py-4 rounded-2xl text-sm font-semibold shadow-sm">
+        <div class="bg-emerald-50 border-l-4 border-emerald-500 text-emerald-900 px-4 py-3 rounded-r-xl text-xs font-semibold shadow-sm">
             {{ session('success') }}
         </div>
     @endif
 
     @if(session('error'))
-        <div class="bg-red-50 border border-red-200 text-red-900 px-5 py-4 rounded-2xl text-sm font-semibold shadow-sm">
+        <div class="bg-red-50 border-l-4 border-red-500 text-red-900 px-4 py-3 rounded-r-xl text-xs font-semibold shadow-sm">
             {{ session('error') }}
         </div>
     @endif
 
-    <!-- Filter Bar -->
-    <div class="bg-white rounded-3xl p-6 shadow-sm border border-sage/20">
-        <form action="{{ route('donations.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end">
-            <div>
-                <label for="food_type" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+    <!-- Filter Bar (Lebih ringkas) -->
+    <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-sage/20">
+        <form action="{{ route('donations.index') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <div class="space-y-1">
+                <label for="food_type" class="block text-[10px] font-bold text-gray-600 uppercase tracking-wider">
                     Jenis Makanan
                 </label>
-                <select id="food_type" name="food_type" class="w-full min-h-[44px] px-3 py-2 rounded-xl border border-gray-300 text-xs font-semibold text-gray-800 bg-white">
+                <select id="food_type" name="food_type" class="w-full min-h-[40px] px-3 py-2 rounded-lg border border-gray-200 text-xs font-medium text-gray-800 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-forest/20 focus:border-forest transition-colors cursor-pointer">
                     <option value="">-- Semua Jenis Makanan --</option>
                     <option value="Makanan Berat" {{ request('food_type') === 'Makanan Berat' ? 'selected' : '' }}>Makanan Berat</option>
                     <option value="Roti & Kue" {{ request('food_type') === 'Roti & Kue' ? 'selected' : '' }}>Roti & Pastry</option>
@@ -52,110 +54,131 @@
                 </select>
             </div>
 
-            <div>
-                <label for="location" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+            <div class="space-y-1">
+                <label for="location" class="block text-[10px] font-bold text-gray-600 uppercase tracking-wider">
                     Lokasi / Area
                 </label>
                 <input id="location" name="location" type="text" value="{{ request('location') }}"
-                       class="w-full min-h-[44px] px-3 py-2 rounded-xl border border-gray-300 text-xs text-gray-800"
+                       class="w-full min-h-[40px] px-3 py-2 rounded-lg border border-gray-200 text-xs font-medium text-gray-800 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-forest/20 focus:border-forest transition-colors"
                        placeholder="Cari lokasi...">
             </div>
 
-            <div>
-                <label for="deadline_filter" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+            <div class="space-y-1">
+                <label for="deadline_filter" class="block text-[10px] font-bold text-gray-600 uppercase tracking-wider">
                     Masa Layak Konsumsi
                 </label>
-                <select id="deadline_filter" name="deadline_filter" class="w-full min-h-[44px] px-3 py-2 rounded-xl border border-gray-300 text-xs font-semibold text-gray-800 bg-white">
+                <select id="deadline_filter" name="deadline_filter" class="w-full min-h-[40px] px-3 py-2 rounded-lg border border-gray-200 text-xs font-medium text-gray-800 bg-gray-50/50 hover:bg-white focus:bg-white focus:ring-2 focus:ring-forest/20 focus:border-forest transition-colors cursor-pointer">
                     <option value="">-- Semua Batas Waktu --</option>
-                    <option value="urgent" {{ request('deadline_filter') === 'urgent' ? 'selected' : '' }}>Segera Kedaluwarsa (< 48 Jam)</option>
+                    <option value="urgent" {{ request('deadline_filter') === 'urgent' ? 'selected' : '' }}>Segera Kedaluwarsa (&lt; 48 Jam)</option>
                     <option value="today" {{ request('deadline_filter') === 'today' ? 'selected' : '' }}>Hari Ini</option>
                 </select>
             </div>
 
             <div class="flex gap-2">
                 <button type="submit"
-                        class="flex-1 min-h-[44px] px-4 py-2.5 bg-forest hover:bg-forest-800 text-white font-bold text-xs rounded-xl transition">
-                    Terapkan Filter
+                        class="flex-1 min-h-[40px] px-3 py-2 bg-forest hover:bg-forest-800 text-white font-bold text-xs rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-forest focus:ring-offset-2">
+                    Terapkan
                 </button>
                 <a href="{{ route('donations.index') }}"
-                   class="min-h-[44px] px-4 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-xs rounded-xl transition flex items-center justify-center">
+                   class="min-h-[40px] px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs rounded-lg transition-colors flex items-center justify-center border border-gray-200">
                     Reset
                 </a>
             </div>
         </form>
     </div>
 
-    <!-- Grid Kartu Donasi -->
+    <!-- Grid Kartu Donasi (Diperkecil & Dirapatkan) -->
     @if($donations->count() > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="donation-grid">
+        <!-- Menggunakan grid-cols-2 pada mobile, dan grid-cols-3/4 pada layar besar -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5" id="donation-grid">
             @foreach($donations as $donation)
                 @php $st = $donation->computed_status; @endphp
-                <div class="bg-white rounded-3xl p-6 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition space-y-4">
+                <div class="bg-white rounded-2xl p-3 sm:p-4 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300 group">
+                    
                     <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-sage-100 text-forest border border-sage/30">
+                        <!-- Foto Produk: Menggunakan aspect-square & object-contain agar utuh -->
+                        @if($donation->photo)
+                            <div class="w-full aspect-square overflow-hidden rounded-xl border border-gray-100 bg-white relative flex items-center justify-center p-2">
+                                <img src="{{ asset('storage/' . $donation->photo) }}"
+                                     alt="Foto {{ $donation->title }}"
+                                     class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
+                            </div>
+                        @else
+                            <div class="w-full aspect-square rounded-xl border border-sage/20 bg-sage-100/40 flex flex-col items-center justify-center text-forest/60 gap-1">
+                                <span class="text-3xl" aria-hidden="true">🍱</span>
+                                <span class="text-[10px] font-semibold">Tanpa Foto</span>
+                            </div>
+                        @endif
+
+                        <!-- Badges (Diperkecil) -->
+                        <div class="flex flex-wrap items-center justify-between gap-1.5">
+                            <span class="px-2 py-1 rounded-md text-[10px] font-bold bg-sage-100 text-forest border border-sage/30">
                                 {{ $donation->food_type }}
                             </span>
                             @if($st === 'urgent')
-                                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200 animate-pulse">
-                                    ⚠️ Segera Kedaluwarsa
+                                <span class="px-2 py-1 rounded-md text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                    Urgent
                                 </span>
                             @else
-                                <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                <span class="px-2 py-1 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                                     Tersedia
                                 </span>
                             @endif
                         </div>
 
-                        <h2 class="font-heading text-xl font-bold text-gray-900 leading-snug">
-                            {{ $donation->title }}
-                        </h2>
+                        <!-- Title & Desc -->
+                        <div>
+                            <h2 class="font-heading text-sm sm:text-base font-bold text-gray-900 leading-tight line-clamp-2 mb-1 group-hover:text-forest transition-colors">
+                                {{ $donation->title }}
+                            </h2>
+                            <p class="text-[11px] text-gray-500 line-clamp-2 leading-relaxed">
+                                {{ $donation->description ?? 'Tidak ada deskripsi.' }}
+                            </p>
+                        </div>
 
-                        <p class="text-xs text-gray-600 line-clamp-3">
-                            {{ $donation->description ?? 'Tidak ada deskripsi tambahan.' }}
-                        </p>
-
-                        <!-- Detail Information -->
-                        <div class="bg-page p-3.5 rounded-2xl space-y-2 text-xs border border-sage/15">
-                            <div class="flex justify-between border-b border-sage/15 pb-1">
-                                <span class="text-gray-500 font-semibold">Usaha Pendonasi:</span>
-                                <span class="font-bold text-forest">{{ $donation->donor->institution_name ?? $donation->donor->name ?? 'Pendonasi' }}</span>
+                        <!-- Detail Information (Diperkecil & Dirapikan) -->
+                        <div class="bg-gray-50/80 p-2.5 rounded-xl space-y-1.5 text-[11px] border border-gray-100">
+                            <div class="flex justify-between items-start gap-2">
+                                <span class="text-gray-500 font-medium shrink-0">Pendonasi</span>
+                                <span class="font-bold text-forest text-right truncate">{{ $donation->donor->institution_name ?? $donation->donor->name ?? 'Pendonasi' }}</span>
                             </div>
-                            <div class="flex justify-between border-b border-sage/15 pb-1">
-                                <span class="text-gray-500 font-semibold">Jumlah Porsi:</span>
-                                <span class="font-bold text-gray-900">{{ $donation->quantity }}</span>
+                            <div class="flex justify-between items-start gap-2">
+                                <span class="text-gray-500 font-medium shrink-0">Porsi</span>
+                                <span class="font-bold text-gray-900 text-right">{{ $donation->quantity }}</span>
                             </div>
-                            <div class="flex justify-between border-b border-sage/15 pb-1">
-                                <span class="text-gray-500 font-semibold">Metode Penyerahan:</span>
-                                <span class="font-semibold text-gray-800">{{ $donation->delivery_method }}</span>
+                            <div class="flex justify-between items-start gap-2">
+                                <span class="text-gray-500 font-medium shrink-0">Metode</span>
+                                <span class="font-semibold text-gray-800 text-right truncate">{{ $donation->delivery_method }}</span>
                             </div>
-                            <div class="flex justify-between border-b border-sage/15 pb-1">
-                                <span class="text-gray-500 font-semibold">Lokasi Pengambilan:</span>
-                                <span class="font-semibold text-gray-800">{{ $donation->location }}</span>
+                            <div class="flex justify-between items-start gap-2">
+                                <span class="text-gray-500 font-medium shrink-0">Lokasi</span>
+                                <span class="font-semibold text-gray-800 text-right truncate" title="{{ $donation->location }}">{{ $donation->location }}</span>
                             </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-500 font-semibold">Batas Layak Konsumsi:</span>
-                                <span class="font-mono text-forest font-bold">
-                                    {{ \Carbon\Carbon::parse($donation->deadline)->format('d M Y H:i') }}
+                            <div class="pt-1.5 mt-1 border-t border-gray-200 flex justify-between items-center gap-2">
+                                <span class="text-gray-500 font-bold shrink-0 text-[10px]">Batas Waktu</span>
+                                <span class="font-mono text-forest font-bold bg-forest/5 px-1.5 py-0.5 rounded text-[10px]">
+                                    {{ \Carbon\Carbon::parse($donation->deadline)->format('d M y H:i') }}
                                 </span>
                             </div>
                         </div>
 
                         <!-- Notes (Allergen & Storage) -->
                         @if($donation->allergen_notes || $donation->storage_notes)
-                            <div class="text-[11px] text-gray-500 space-y-1 bg-amber-50/50 p-3 rounded-xl border border-amber-100">
+                            <div class="text-[10px] text-gray-600 space-y-1 bg-amber-50/60 p-2 rounded-lg border border-amber-100/80">
                                 @if($donation->allergen_notes)
-                                    <p><strong>Alergen:</strong> {{ $donation->allergen_notes }}</p>
+                                    <p class="line-clamp-1"><strong class="text-amber-800">Alergen:</strong> {{ $donation->allergen_notes }}</p>
                                 @endif
                                 @if($donation->storage_notes)
-                                    <p><strong>Penyimpanan:</strong> {{ $donation->storage_notes }}</p>
+                                    <p class="line-clamp-1"><strong class="text-amber-800">Simpan:</strong> {{ $donation->storage_notes }}</p>
                                 @endif
                             </div>
                         @endif
                     </div>
 
-                    <!-- Action Claim Button -->
-                    <div class="pt-2">
+                    <!-- Action Claim Button (Diperkecil) -->
+                    <div class="pt-3 mt-auto">
                         @auth
                             @if(auth()->user()->isPenerima())
                                 @if(auth()->user()->status === 'verified')
@@ -171,25 +194,25 @@
                                                     confirmBtnClass: 'bg-forest hover:bg-forest-800 text-white',
                                                     onConfirm: () => document.getElementById('claim-form-{{ $donation->id }}').submit()
                                                 })"
-                                                class="w-full min-h-[48px] px-6 py-3 inline-flex items-center justify-center bg-forest hover:bg-forest-800 text-white font-bold text-sm rounded-xl shadow-md transition focus:outline-none focus:ring-2 focus:ring-forest">
-                                            Klaim Donasi Pangan Ini
+                                                class="w-full min-h-[36px] px-4 py-2 inline-flex items-center justify-center bg-forest hover:bg-forest-800 text-white font-bold text-xs rounded-lg shadow-sm hover:shadow transition-all focus:outline-none focus:ring-2 focus:ring-forest focus:ring-offset-1">
+                                            Klaim Donasi Ini
                                         </button>
                                     </form>
                                 @else
                                     <button disabled
-                                            class="w-full min-h-[48px] px-6 py-3 inline-flex items-center justify-center bg-amber-100 text-amber-800 font-bold text-xs rounded-xl cursor-not-allowed border border-amber-300">
-                                        🔒 Klaim Terkunci (Akun Menunggu Verifikasi Admin)
+                                            class="w-full min-h-[36px] px-4 py-2 inline-flex items-center justify-center bg-amber-50 text-amber-700 font-bold text-[10px] rounded-lg cursor-not-allowed border border-amber-200 text-center leading-tight">
+                                        🔒 Menunggu Verifikasi Admin
                                     </button>
                                 @endif
                             @else
-                                <div class="text-center p-3 bg-gray-100 rounded-xl text-xs text-gray-600 font-semibold">
-                                    Hanya akun Penerima yang diperbolehkan mengklaim
+                                <div class="text-center p-2 bg-gray-50 border border-gray-200 rounded-lg text-[10px] text-gray-500 font-semibold">
+                                    Khusus Akun Penerima
                                 </div>
                             @endif
                         @else
                             <a href="{{ route('login') }}"
-                               class="w-full min-h-[48px] px-6 py-3 inline-flex items-center justify-center bg-white border border-sage/40 text-forest font-bold text-sm rounded-xl hover:bg-sage-100 transition">
-                                Masuk Portal untuk Mengklaim
+                               class="w-full min-h-[36px] px-4 py-2 inline-flex items-center justify-center bg-white border-2 border-forest/20 text-forest font-bold text-xs rounded-lg hover:bg-forest/5 hover:border-forest/30 transition-all">
+                                Masuk untuk Klaim
                             </a>
                         @endauth
                     </div>
@@ -197,20 +220,23 @@
             @endforeach
         </div>
 
-        <div class="pt-6">
+        <div class="pt-6 flex justify-center">
             {{ $donations->links() }}
         </div>
     @else
-        <div class="bg-white rounded-3xl p-12 text-center border border-sage/20 space-y-4 max-w-2xl mx-auto">
-            <div class="w-16 h-16 rounded-2xl bg-forest-50 text-forest flex items-center justify-center text-3xl mx-auto">
+        <!-- Empty State -->
+        <div class="bg-white rounded-2xl p-10 text-center border border-sage/20 space-y-4 max-w-xl mx-auto shadow-sm">
+            <div class="w-16 h-16 rounded-full bg-sage-50 text-forest flex items-center justify-center text-3xl mx-auto border border-sage/20">
                 🔍
             </div>
-            <h3 class="font-heading text-2xl font-bold text-forest">Tidak Ada Donasi Aktif Sesuai Kriteria</h3>
-            <p class="text-xs text-gray-600">
-                Belum ada donasi makanan berlebih yang tersedia atau telah melewati batas waktu layak konsumsi. Silakan coba atur ulang filter pencarian Anda.
-            </p>
-            <a href="{{ route('donations.index') }}" class="inline-flex min-h-[44px] px-6 py-2.5 bg-forest text-white font-bold text-xs rounded-xl">
-                Reset Filter Pencarian
+            <div class="space-y-1">
+                <h3 class="font-heading text-xl font-bold text-forest">Tidak Ada Donasi Aktif</h3>
+                <p class="text-xs text-gray-500 max-w-sm mx-auto leading-relaxed">
+                    Belum ada donasi yang sesuai kriteria atau telah melewati batas waktu. Silakan atur ulang filter Anda.
+                </p>
+            </div>
+            <a href="{{ route('donations.index') }}" class="inline-flex min-h-[40px] px-6 py-2 bg-forest hover:bg-forest-800 text-white font-bold text-xs rounded-lg shadow-sm transition-all">
+                Reset Filter
             </a>
         </div>
     @endif

@@ -28,6 +28,7 @@ class Donation extends Model
         'status', // urgent, available, claimed, completed, expired
         'claimed_by_user_id',
         'claimed_at',
+        'photo'
     ];
 
     protected function casts(): array
