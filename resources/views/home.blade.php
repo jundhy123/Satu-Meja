@@ -290,7 +290,7 @@
 
 
 <!-- ================================================================= -->
-<!-- SECTION 4: FEED DONASI AKTIF / KEADAAN KOSONG                    -->
+<!-- SECTION 4: FEED DONASI AKTIF / KEADAAN KOSONG (SOFT SAGE GRADIENT)-->
 <!-- ================================================================= -->
 <section class="relative py-24 bg-gradient-to-b from-[#EBF0E7] via-[#F4F6F0] to-[#F6F3EB] border-t border-sage/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -309,25 +309,24 @@
         </div>
 
         @if(isset($latestDonations) && $latestDonations->count() > 0)
-            <!-- Grid Donasi Aktif -->
+            <!-- Grid Donasi Aktif (Animasi Zoom-In + Fallback Gambar Otomatis) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 @foreach($latestDonations as $index => $donation)
                     <div style="transition-delay: {{ ($index % 4) * 120 }}ms;"
                          class="reveal-zoom bg-white rounded-2xl p-4 border border-sage/25 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group">
                         <div class="space-y-3">
 
-                            <!-- Foto Produk Makanan -->
-                            @if($donation->image_url_formatted)
-                                <div class="w-full aspect-[4/3] overflow-hidden rounded-xl border border-sage/15 bg-white relative flex items-center justify-center p-1">
-                                    <img src="{{ $donation->image_url_formatted }}"
-                                         alt="Foto {{ $donation->title }}"
-                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-lg">
-                                </div>
-                            @elseif($donation->photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($donation->photo))
-                                <div class="w-full aspect-[4/3] overflow-hidden rounded-xl border border-sage/15 bg-white relative flex items-center justify-center p-1">
+                            <!-- Foto Produk Makanan (Dengan Fallback Otomatis jika file gambar belum ada) -->
+                            @if($donation->photo)
+                                <div class="w-full aspect-[4/3] overflow-hidden rounded-xl border border-sage/15 bg-sage-100/30 relative flex items-center justify-center">
                                     <img src="{{ asset('storage/' . $donation->photo) }}"
                                          alt="Foto {{ $donation->title }}"
-                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-lg">
+                                         onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <div class="hidden w-full h-full flex flex-col items-center justify-center text-forest/60 gap-1.5 p-3 text-center">
+                                        <span class="text-3xl" aria-hidden="true">🍱</span>
+                                        <span class="text-[11px] font-semibold line-clamp-1">{{ $donation->title }}</span>
+                                    </div>
                                 </div>
                             @else
                                 <div class="w-full aspect-[4/3] rounded-xl border border-sage/20 bg-sage-100/40 flex flex-col items-center justify-center text-forest/60 gap-1">
@@ -449,6 +448,7 @@
                     index++;
                     setTimeout(typeChar, speed);
                 } else if (typewriterCursor) {
+                    // Sembunyikan kursor 1.2 detik setelah selesai mengetik agar tampilan bersih
                     setTimeout(() => {
                         typewriterCursor.classList.add('opacity-0', 'transition-opacity', 'duration-500');
                     }, 1200);

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class Donation extends Model
@@ -29,6 +28,7 @@ class Donation extends Model
         'status', // urgent, available, claimed, completed, expired
         'claimed_by_user_id',
         'claimed_at',
+        'photo'
     ];
 
     protected function casts(): array
@@ -53,38 +53,6 @@ class Donation extends Model
             'paket-nasi' => 'Paket Nasi',
             default => $this->food_type ?? 'Pangan Berlebih',
         };
-    }
-
-    /**
-     * Alias accessor for photo -> image_url for backwards compatibility
-     */
-    public function getPhotoAttribute(): ?string
-    {
-        return $this->image_url;
-    }
-
-    /**
-     * Formatted Image URL Accessor with Storage validation & placeholder fallback
-     */
-    public function getImageUrlFormattedAttribute(): ?string
-    {
-        $path = $this->image_url;
-
-        if (!$path) {
-            return null;
-        }
-
-        // If stored in public disk (e.g. images/donasi/xyz.jpg)
-        if (Storage::disk('public')->exists($path)) {
-            return asset('storage/' . $path);
-        }
-
-        // Fallback for legacy external URLs
-        if (filter_var($path, FILTER_VALIDATE_URL)) {
-            return $path;
-        }
-
-        return null;
     }
 
     /**

@@ -94,18 +94,13 @@
                             <tr class="hover:bg-forest-50/30 transition">
                                 <td class="px-4 py-4 font-bold text-gray-900">
                                     <div class="flex items-center gap-3">
-                                        @if($donation->image_url_formatted)
-                                            <img src="{{ $donation->image_url_formatted }}"
-                                                 alt="Foto {{ $donation->title }}"
-                                                 class="w-12 h-12 rounded-xl object-cover border border-sage/30 shrink-0">
-                                        @elseif($donation->photo && \Illuminate\Support\Facades\Storage::disk('public')->exists($donation->photo))
+                                        @if($donation->photo)
                                             <img src="{{ asset('storage/' . $donation->photo) }}"
                                                  alt="Foto {{ $donation->title }}"
                                                  class="w-12 h-12 rounded-xl object-cover border border-sage/30 shrink-0">
                                         @else
-                                            <div class="w-12 h-12 rounded-xl bg-sage-100 border border-sage/20 flex flex-col items-center justify-center text-forest text-[10px] font-semibold shrink-0 text-center leading-tight">
-                                                <span class="text-xs">🍱</span>
-                                                <span>Tanpa Foto</span>
+                                            <div class="w-12 h-12 rounded-xl bg-sage-100 border border-sage/20 flex items-center justify-center text-forest text-[10px] font-semibold shrink-0 text-center leading-tight">
+                                                Tanpa Foto
                                             </div>
                                         @endif
                                         <div>

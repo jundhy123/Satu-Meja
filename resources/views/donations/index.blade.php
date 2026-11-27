@@ -96,12 +96,12 @@
                 <div class="bg-white rounded-2xl p-3 sm:p-4 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300 group">
 
                     <div class="space-y-3">
-                        <!-- Foto Produk / Placeholder Tanpa Foto -->
-                        @if($donation->image_url_formatted)
-                            <div class="w-full aspect-square overflow-hidden rounded-xl border border-gray-100 bg-white relative flex items-center justify-center p-1">
-                                <img src="{{ $donation->image_url_formatted }}"
+                        <!-- Foto Produk: Menggunakan aspect-square & object-contain agar utuh -->
+                        @if($donation->photo)
+                            <div class="w-full aspect-square overflow-hidden rounded-xl border border-gray-100 bg-white relative flex items-center justify-center p-2">
+                                <img src="{{ asset('storage/' . $donation->photo) }}"
                                      alt="Foto {{ $donation->title }}"
-                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-lg">
+                                     class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
                             </div>
                         @else
                             <div class="w-full aspect-square rounded-xl border border-sage/20 bg-sage-100/40 flex flex-col items-center justify-center text-forest/60 gap-1">
