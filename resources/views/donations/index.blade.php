@@ -7,7 +7,7 @@
     <!-- Header Banner (Diperkecil padding-nya) -->
     <div class="bg-forest text-white rounded-2xl p-6 sm:p-8 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4 border border-sage/20 relative overflow-hidden">
         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-sage/10 rounded-full blur-2xl pointer-events-none"></div>
-        
+
         <div class="space-y-2 relative z-10">
             <span class="inline-block px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-sage/30 text-sage-200 border border-sage/40">
                 Pencarian Pangan Terverifikasi
@@ -94,14 +94,14 @@
             @foreach($donations as $donation)
                 @php $st = $donation->computed_status; @endphp
                 <div class="bg-white rounded-2xl p-3 sm:p-4 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300 group">
-                    
+
                     <div class="space-y-3">
-                        <!-- Foto Produk: Menggunakan aspect-square & object-contain agar utuh -->
-                        @if($donation->photo)
-                            <div class="w-full aspect-square overflow-hidden rounded-xl border border-gray-100 bg-white relative flex items-center justify-center p-2">
-                                <img src="{{ asset('storage/' . $donation->photo) }}"
+                        <!-- Foto Produk / Placeholder Tanpa Foto -->
+                        @if($donation->image_url_formatted)
+                            <div class="w-full aspect-square overflow-hidden rounded-xl border border-gray-100 bg-white relative flex items-center justify-center p-1">
+                                <img src="{{ $donation->image_url_formatted }}"
                                      alt="Foto {{ $donation->title }}"
-                                     class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-lg">
                             </div>
                         @else
                             <div class="w-full aspect-square rounded-xl border border-sage/20 bg-sage-100/40 flex flex-col items-center justify-center text-forest/60 gap-1">

@@ -7,6 +7,8 @@ use App\Models\ThankYou;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PendonasiController extends Controller
 {
@@ -59,23 +61,27 @@ class PendonasiController extends Controller
             'allergen_notes' => ['nullable', 'string'],
             'storage_notes' => ['nullable', 'string'],
             'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        $photoPath = null;
-        if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('donations', 'public');
+        $imagePath = null;
+        $file = $request->file('photo') ?? $request->file('image');
+
+        if ($file) {
+            // Save into storage/app/public/images/donasi/ with unique filename
+            $extension = $file->getClientOriginalExtension();
+            $filename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . Str::random(10) . '.' . $extension;
+            $imagePath = $file->storeAs('images/donasi', $filename, 'public');
         }
 
         $deadlineTime = Carbon::parse($validated['deadline']);
-
-        // Determine status based on contract: sisa waktu < 48 jam = urgent; besides = available
         $status = $deadlineTime->diffInHours(now()) <= 48 ? 'urgent' : 'available';
 
         Donation::create([
             'user_id' => $user->id,
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
-            'photo' => $photoPath,
+            'image_url' => $imagePath,
             'food_type' => $validated['food_type'],
             'quantity' => $validated['quantity'],
             'delivery_method' => $validated['delivery_method'],
@@ -89,6 +95,97 @@ class PendonasiController extends Controller
             'status' => $status,
         ]);
 
-        return redirect()->route('pendonasi.dashboard')->with('success', 'Donasi pangan berlebih berhasil dipublikasikan! Status awal: ' . strtoupper($status));
+        return redirect()->route('pendonasi.dashboard')->with('success', 'Donasi pangan berlebih berhasil dipublikasikan! Foto makanan telah tersimpan di storage.');
+    }
+
+    public function edit(Donation $donation)
+    {
+        $user = Auth::user();
+        if ($donation->user_id !== $user->id) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengedit donasi ini.');
+        }
+
+        return view('pendonasi.edit', compact('user', 'donation'));
+    }
+
+    public function update(Request $request, Donation $donation)
+    {
+        $user = Auth::user();
+        if ($donation->user_id !== $user->id) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengubah donasi ini.');
+        }
+
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'food_type' => ['required', 'string', 'max:100'],
+            'quantity' => ['required', 'string', 'max:255'],
+            'delivery_method' => ['required', 'string', 'in:Ambil Sendiri,Diantar Pendonasi'],
+            'deadline' => ['required', 'date'],
+            'location' => ['required', 'string', 'max:255'],
+            'pickup_address' => ['required', 'string'],
+            'pic_name' => ['required', 'string', 'max:255'],
+            'pic_contact' => ['required', 'string', 'max:50'],
+            'description' => ['nullable', 'string'],
+            'allergen_notes' => ['nullable', 'string'],
+            'storage_notes' => ['nullable', 'string'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        $file = $request->file('photo') ?? $request->file('image');
+
+        if ($file) {
+            // Delete old photo if it exists
+            $oldPath = $donation->image_url;
+            if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
+
+            // Store new photo
+            $extension = $file->getClientOriginalExtension();
+            $filename = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '-' . Str::random(10) . '.' . $extension;
+            $newPath = $file->storeAs('images/donasi', $filename, 'public');
+
+            $donation->image_url = $newPath;
+        }
+
+        $deadlineTime = Carbon::parse($validated['deadline']);
+        $status = $deadlineTime->diffInHours(now()) <= 48 ? 'urgent' : 'available';
+
+        $donation->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'food_type' => $validated['food_type'],
+            'quantity' => $validated['quantity'],
+            'delivery_method' => $validated['delivery_method'],
+            'location' => $validated['location'],
+            'pickup_address' => $validated['pickup_address'],
+            'pic_name' => $validated['pic_name'],
+            'pic_contact' => $validated['pic_contact'],
+            'deadline' => $deadlineTime,
+            'allergen_notes' => $validated['allergen_notes'] ?? null,
+            'storage_notes' => $validated['storage_notes'] ?? null,
+            'status' => $donation->status === 'claimed' ? 'claimed' : $status,
+        ]);
+
+        return redirect()->route('pendonasi.dashboard')->with('success', 'Donasi pangan berhasil diperbarui!');
+    }
+
+    public function destroy(Donation $donation)
+    {
+        $user = Auth::user();
+        if ($donation->user_id !== $user->id) {
+            abort(403, 'Anda tidak memiliki akses untuk menghapus donasi ini.');
+        }
+
+        // Delete photo from storage if exists
+        $path = $donation->image_url;
+        if ($path && Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
+        }
+
+        $donation->delete();
+
+        return redirect()->route('pendonasi.dashboard')->with('success', 'Paket donasi dan file foto terkait telah berhasil dihapus.');
     }
 }
