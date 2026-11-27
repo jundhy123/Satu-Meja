@@ -3,27 +3,119 @@
 @section('title', 'Beranda - Satu Meja | Platform Berbagi Pangan Zero Hunger')
 
 @section('content')
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Tekstur pola titik organik untuk Section 2 */
+    .bg-organic-cream {
+        background-color: #F6F3EB;
+        background-image: radial-gradient(rgba(30, 53, 33, 0.11) 1px, transparent 1px);
+        background-size: 22px 22px;
+    }
+
+    /* Latar hijau hutan dalam untuk Section 3 */
+    .bg-deep-forest {
+        background: linear-gradient(145deg, #1B321E 0%, #244028 50%, #152818 100%);
+    }
+
+    /* Animasi cahaya melayang halus di latar belakang */
+    @keyframes floatAmbient {
+        0%, 100% { transform: translateY(0px) scale(1); }
+        50% { transform: translateY(-18px) scale(1.05); }
+    }
+    .animate-ambient-1 {
+        animation: floatAmbient 8s ease-in-out infinite;
+    }
+    .animate-ambient-2 {
+        animation: floatAmbient 10s ease-in-out 2.5s infinite;
+    }
+
+    /* Animasi Scroll Reveal (Ringan & Tanpa Ketergantungan CDN) */
+    .reveal-up {
+        opacity: 0;
+        transform: translateY(32px);
+        transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-up.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .reveal-zoom {
+        opacity: 0;
+        transform: scale(0.94) translateY(20px);
+        transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal-zoom.is-visible {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+
+    /* Garis penghubung langkah 01 -> 04 yang menggambar otomatis saat terlihat */
+    .step-line-draw {
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+    }
+    .step-line-draw.is-visible {
+        transform: scaleX(1);
+    }
+
+    /* Micro-interaction kartu filosofi */
+    .pillar-card {
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                    box-shadow 0.35s ease,
+                    border-color 0.35s ease;
+    }
+    .pillar-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 22px 38px -12px rgba(27, 50, 30, 0.14);
+    }
+    .pillar-card .bottom-bar {
+        width: 0%;
+        transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .pillar-card:hover .bottom-bar {
+        width: 100%;
+    }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+
 <!-- ================================================================= -->
 <!-- HERO SECTION WITH CLEAN FULL VIDEO BACKGROUND                     -->
 <!-- ================================================================= -->
 <section class="relative w-full h-screen flex flex-col justify-between overflow-hidden bg-black text-white">
-    <!-- Clean Video Background (Natural Crisp Colors, Asset URL) -->
+    <!-- Clean Video Background -->
     <div class="absolute inset-0 z-0 bg-black">
         <video id="hero-bg-video" class="w-full h-full object-cover transition-opacity duration-700" autoplay muted playsinline preload="auto">
             <source src="{{ asset('animation/Diverse_people_eating_at_table_8cca1276.mp4') }}" type="video/mp4">
             Browser Anda tidak mendukung pemutaran video.
         </video>
-        <!-- Soft subtle top/bottom gradient overlay for text readability -->
-        <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/40 pointer-events-none"></div>
+        <!-- Gradient halus atas & bawah -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/30 pointer-events-none"></div>
     </div>
 
-    <!-- Centered Typewriter Text Container (Positioned right under the large "Satu Meja" in the final frame) -->
-    <div class="relative z-10 my-auto flex flex-col items-center justify-center text-center px-6 pt-36 sm:pt-48 pointer-events-none">
-        <div id="typewriter-container" class="opacity-0 transition-opacity duration-700 max-w-3xl mx-auto">
-            <p class="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-forest-900 tracking-wide leading-relaxed drop-shadow-sm">
-                <span id="typed-content"></span><span id="typewriter-cursor" class="inline-block w-0.5 h-6 sm:h-8 bg-forest-900 ml-1 animate-pulse">|</span>
+    <!-- Typewriter Text Tanpa Kotak Background (Menyatu Langsung dengan Video) -->
+    <div class="relative z-10 mt-auto mb-24 sm:mb-28 md:mb-32 flex flex-col items-center justify-center text-center px-6 pointer-events-none">
+        <div id="typewriter-container"
+             class="opacity-0 translate-y-2 transition-all duration-700 max-w-2xl mx-auto">
+            <p style="font-family: 'Quicksand', sans-serif; text-shadow: 0 2px 14px rgba(244, 235, 214, 0.9);"
+               class="text-lg sm:text-xl md:text-2xl font-bold text-[#153B1E] tracking-wide leading-relaxed">
+                <span id="typed-content"></span><span id="typewriter-cursor" class="inline-block w-0.5 h-5 sm:h-6 bg-[#153B1E] ml-1 align-middle animate-pulse"></span>
             </p>
         </div>
+    </div>
+
+    <!-- Transisi Lengkungan Organik ke Section 2 -->
+    <div class="relative z-10 w-full overflow-hidden leading-none pointer-events-none">
+        <svg class="block w-full h-7 sm:h-11" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,10 C320,115 880,115 1200,10 L1200,120 L0,120 Z" fill="#F6F3EB"></path>
+        </svg>
     </div>
 </section>
 
@@ -31,11 +123,17 @@
 <!-- ================================================================= -->
 <!-- SECTION 2: FILOSOFI & MENGAPA SATU MEJA                           -->
 <!-- ================================================================= -->
-<section id="tentang" class="py-20 bg-white border-y border-sage/15">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-14 space-y-3">
-            <span class="text-xs font-bold uppercase tracking-widest text-sage">Gagasan & Filosofi</span>
-            <h2 class="font-heading text-3xl sm:text-4xl font-bold text-forest">
+<section id="tentang" class="relative py-24 bg-organic-cream border-b border-sage/20 overflow-hidden">
+    <!-- Ornamen Cahaya Organik Melayang -->
+    <div class="pointer-events-none absolute -top-24 -left-24 w-80 h-80 rounded-full bg-[#D6C296]/30 blur-3xl animate-ambient-1"></div>
+    <div class="pointer-events-none absolute -bottom-24 -right-20 w-96 h-96 rounded-full bg-sage/20 blur-3xl animate-ambient-2"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="reveal-up text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-forest/10 text-xs font-bold uppercase tracking-widest text-forest">
+                Gagasan &amp; Filosofi
+            </span>
+            <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-forest">
                 Mengapa Memilih Satu Meja?
             </h2>
             <p class="text-base text-gray-600 leading-relaxed">
@@ -45,9 +143,10 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Pillar 1 -->
-            <div class="bg-page rounded-3xl p-8 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div style="transition-delay: 100ms;"
+                 class="reveal-up pillar-card relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl p-8 border border-sage/25 shadow-sm flex flex-col justify-between group">
                 <div class="space-y-4">
-                    <div class="w-14 h-14 rounded-2xl bg-forest text-white flex items-center justify-center text-2xl shadow-md">
+                    <div class="w-14 h-14 rounded-2xl bg-forest text-white flex items-center justify-center text-2xl shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                         🤝
                     </div>
                     <h3 class="font-heading text-xl font-bold text-forest">Kemitraan Setara</h3>
@@ -55,15 +154,18 @@
                         Pendonasi dan Penerima berada di meja yang sama sebagai mitra seimbang. Menghapus stigma "pemberi dan peminta", memperkuat kolaborasi sosial yang bermartabat.
                     </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-sage/20 flex items-center gap-2 text-xs font-semibold text-forest">
+                <div class="mt-6 pt-4 border-t border-sage/20 flex items-center justify-between text-xs font-semibold text-forest">
                     <span>SDG 2: Zero Hunger</span>
+                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sage">●</span>
                 </div>
+                <div class="bottom-bar absolute bottom-0 left-0 h-1 bg-forest"></div>
             </div>
 
             <!-- Pillar 2 -->
-            <div class="bg-page rounded-3xl p-8 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div style="transition-delay: 250ms;"
+                 class="reveal-up pillar-card relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl p-8 border border-sage/25 shadow-sm flex flex-col justify-between group">
                 <div class="space-y-4">
-                    <div class="w-14 h-14 rounded-2xl bg-sage text-forest flex items-center justify-center text-2xl shadow-md">
+                    <div class="w-14 h-14 rounded-2xl bg-sage text-forest flex items-center justify-center text-2xl shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
                         ⏱️
                     </div>
                     <h3 class="font-heading text-xl font-bold text-forest">Kedaluwarsa Otomatis</h3>
@@ -71,15 +173,18 @@
                         Sistem mengevaluasi batas waktu layak konsumsi secara real-time setiap 15 detik. Pangan yang telah lewat waktu otomatis disembunyikan agar kualitas dan keamanan terjamin.
                     </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-sage/20 flex items-center gap-2 text-xs font-semibold text-forest">
+                <div class="mt-6 pt-4 border-t border-sage/20 flex items-center justify-between text-xs font-semibold text-forest">
                     <span>Keamanan Pangan Terjaga</span>
+                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sage">●</span>
                 </div>
+                <div class="bottom-bar absolute bottom-0 left-0 h-1 bg-sage"></div>
             </div>
 
             <!-- Pillar 3 -->
-            <div class="bg-page rounded-3xl p-8 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div style="transition-delay: 400ms;"
+                 class="reveal-up pillar-card relative overflow-hidden bg-white/90 backdrop-blur-md rounded-3xl p-8 border border-sage/25 shadow-sm flex flex-col justify-between group">
                 <div class="space-y-4">
-                    <div class="w-14 h-14 rounded-2xl bg-khaki text-forest flex items-center justify-center text-2xl shadow-md">
+                    <div class="w-14 h-14 rounded-2xl bg-khaki text-forest flex items-center justify-center text-2xl shadow-md transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                         🛡️
                     </div>
                     <h3 class="font-heading text-xl font-bold text-forest">100% Terverifikasi</h3>
@@ -87,8 +192,96 @@
                         Setiap akun pelaku usaha dan lembaga sosial diverifikasi langsung oleh Admin sebelum dapat melakukan aktivitas posting atau klaim. Menjamin keamanan dua arah.
                     </p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-sage/20 flex items-center gap-2 text-xs font-semibold text-forest">
+                <div class="mt-6 pt-4 border-t border-sage/20 flex items-center justify-between text-xs font-semibold text-forest">
                     <span>Moderasi Admin Terpusat</span>
+                    <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-khaki">●</span>
+                </div>
+                <div class="bottom-bar absolute bottom-0 left-0 h-1 bg-khaki"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ================================================================= -->
+<!-- SECTION 3: CARA KERJA SYSTEM (DEEP FOREST + ANIMATED TIMELINE)    -->
+<!-- ================================================================= -->
+<section id="cara-kerja" class="relative py-24 bg-deep-forest text-white overflow-hidden">
+    <!-- Cahaya hangat dekoratif -->
+    <div class="pointer-events-none absolute top-0 right-1/4 w-96 h-96 rounded-full bg-[#D6C296]/10 blur-3xl"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="reveal-up text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <span class="inline-block px-3.5 py-1 rounded-full bg-white/10 text-xs font-bold uppercase tracking-widest text-[#D6C296]">
+                Alur Penyelesaian
+            </span>
+            <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+                Cara Kerja Platform Satu Meja
+            </h2>
+            <p class="text-base text-stone-300 leading-relaxed">
+                Empat langkah cepat mempertemukan makanan berlebih dengan lembaga penyalur sebelum melewati batas layak konsumsi.
+            </p>
+        </div>
+
+        <div class="relative">
+            <!-- Garis penghubung horizontal animatif pada layar desktop -->
+            <div class="step-line-draw hidden lg:block absolute top-11 left-12 right-12 h-0.5 bg-gradient-to-r from-[#D6C296]/25 via-[#D6C296] to-[#D6C296]/25"></div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
+                <!-- Step 1 -->
+                <div style="transition-delay: 100ms;"
+                     class="reveal-up group bg-white/[0.07] hover:bg-white/[0.13] backdrop-blur-md rounded-3xl p-7 border border-white/15 hover:border-[#D6C296]/60 shadow-lg transition-all duration-300 hover:-translate-y-2">
+                    <span class="w-11 h-11 rounded-2xl bg-[#D6C296] text-[#1B321E] font-extrabold flex items-center justify-center font-heading mb-5 shadow-md transition-transform duration-300 group-hover:scale-110">
+                        01
+                    </span>
+                    <h3 class="font-heading text-lg font-bold text-white group-hover:text-[#D6C296] transition-colors mb-2.5">
+                        Registrasi &amp; Verifikasi
+                    </h3>
+                    <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                        Pengguna mendaftar sebagai Pendonasi atau Penerima. Admin memeriksa identitas dan memverifikasi akun.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div style="transition-delay: 250ms;"
+                     class="reveal-up group bg-white/[0.07] hover:bg-white/[0.13] backdrop-blur-md rounded-3xl p-7 border border-white/15 hover:border-[#D6C296]/60 shadow-lg transition-all duration-300 hover:-translate-y-2">
+                    <span class="w-11 h-11 rounded-2xl bg-[#D6C296] text-[#1B321E] font-extrabold flex items-center justify-center font-heading mb-5 shadow-md transition-transform duration-300 group-hover:scale-110">
+                        02
+                    </span>
+                    <h3 class="font-heading text-lg font-bold text-white group-hover:text-[#D6C296] transition-colors mb-2.5">
+                        Bagikan Pangan
+                    </h3>
+                    <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                        Pendonasi menerbitkan donasi (porsi, lokasi, batas waktu layak). Sistem menetapkan status Segera Kedaluwarsa/Tersedia.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div style="transition-delay: 400ms;"
+                     class="reveal-up group bg-white/[0.07] hover:bg-white/[0.13] backdrop-blur-md rounded-3xl p-7 border border-white/15 hover:border-[#D6C296]/60 shadow-lg transition-all duration-300 hover:-translate-y-2">
+                    <span class="w-11 h-11 rounded-2xl bg-[#D6C296] text-[#1B321E] font-extrabold flex items-center justify-center font-heading mb-5 shadow-md transition-transform duration-300 group-hover:scale-110">
+                        03
+                    </span>
+                    <h3 class="font-heading text-lg font-bold text-white group-hover:text-[#D6C296] transition-colors mb-2.5">
+                        Cari &amp; Klaim Donasi
+                    </h3>
+                    <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                        Penerima terverifikasi memfilter pangan aktif dan mengklaim. Klaim ganda dicek dan dicegah oleh sistem.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div style="transition-delay: 550ms;"
+                     class="reveal-up group bg-white/[0.07] hover:bg-white/[0.13] backdrop-blur-md rounded-3xl p-7 border border-white/15 hover:border-[#D6C296]/60 shadow-lg transition-all duration-300 hover:-translate-y-2">
+                    <span class="w-11 h-11 rounded-2xl bg-[#D6C296] text-[#1B321E] font-extrabold flex items-center justify-center font-heading mb-5 shadow-md transition-transform duration-300 group-hover:scale-110">
+                        04
+                    </span>
+                    <h3 class="font-heading text-lg font-bold text-white group-hover:text-[#D6C296] transition-colors mb-2.5">
+                        Serah Terima &amp; Apresiasi
+                    </h3>
+                    <p class="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                        Pengambilan fisik dilakukan, data pengklaim tampil di dasbor, dan Penerima dapat mengirim ucapan terima kasih.
+                    </p>
                 </div>
             </div>
         </div>
@@ -97,117 +290,63 @@
 
 
 <!-- ================================================================= -->
-<!-- SECTION 3: CARA KERJA SYSTEM (HOW IT WORKS)                      -->
+<!-- SECTION 4: FEED DONASI AKTIF / KEADAAN KOSONG (SOFT SAGE GRADIENT)-->
 <!-- ================================================================= -->
-<section id="cara-kerja" class="py-20 bg-page">
+<section class="relative py-24 bg-gradient-to-b from-[#EBF0E7] via-[#F4F6F0] to-[#F6F3EB] border-t border-sage/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span class="text-xs font-bold uppercase tracking-widest text-sage">Alur Penyelesaian</span>
-            <h2 class="font-heading text-3xl sm:text-4xl font-bold text-forest">
-                Cara Kerja Platform Satu Meja
-            </h2>
-            <p class="text-base text-gray-600">
-                Empat langkah cepat mempertemukan makanan berlebih dengan lembaga penyalur sebelum melewati batas layak konsumsi.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Step 1 -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm relative">
-                <span class="w-10 h-10 rounded-xl bg-forest text-white font-bold flex items-center justify-center font-heading mb-4">
-                    01
-                </span>
-                <h3 class="font-heading text-lg font-bold text-forest mb-2">Registrasi & Verifikasi</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">
-                    Pengguna mendaftar sebagai Pendonasi atau Penerima. Admin memeriksa identitas dan memverifikasi akun.
-                </p>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm relative">
-                <span class="w-10 h-10 rounded-xl bg-forest text-white font-bold flex items-center justify-center font-heading mb-4">
-                    02
-                </span>
-                <h3 class="font-heading text-lg font-bold text-forest mb-2">Bagikan Pangan</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">
-                    Pendonasi menerbitkan donasi (porsi, lokasi, batas waktu layak). Sistem menetapkan status Segera Kedaluwarsa/Tersedia.
-                </p>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm relative">
-                <span class="w-10 h-10 rounded-xl bg-forest text-white font-bold flex items-center justify-center font-heading mb-4">
-                    03
-                </span>
-                <h3 class="font-heading text-lg font-bold text-forest mb-2">Cari & Klaim Donasi</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">
-                    Penerima terverifikasi memfilter pangan aktif dan mengklaim. Klaim ganda dicek dan dicegah oleh sistem.
-                </p>
-            </div>
-
-            <!-- Step 4 -->
-            <div class="bg-white rounded-3xl p-6 border border-gray-200 shadow-sm relative">
-                <span class="w-10 h-10 rounded-xl bg-forest text-white font-bold flex items-center justify-center font-heading mb-4">
-                    04
-                </span>
-                <h3 class="font-heading text-lg font-bold text-forest mb-2">Serah Terima & Apresiasi</h3>
-                <p class="text-xs text-gray-600 leading-relaxed">
-                    Pengambilan fisik dilakukan, data pengklaim tampil di dasbor, dan Penerima dapat mengirim ucapan terima kasih.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-<!-- ================================================================= -->
-<!-- SECTION 4: FEED DONASI AKTIF / KEADAAN KOSONG (EMPTY STATE)      -->
-<!-- ================================================================= -->
-<section class="py-20 bg-white border-t border-sage/15">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div class="reveal-up flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
-                <span class="text-xs font-bold uppercase tracking-widest text-sage">Pangan Aktif Tersedia</span>
-                <h2 class="font-heading text-3xl font-bold text-forest">Donasi Pangan Terbaru</h2>
+                <span class="inline-block px-3 py-1 rounded-full bg-forest/10 text-xs font-bold uppercase tracking-widest text-forest mb-2">
+                    Pangan Aktif Tersedia
+                </span>
+                <h2 class="font-heading text-3xl sm:text-4xl font-bold text-forest">Donasi Pangan Terbaru</h2>
             </div>
             <a href="{{ route('donations.index') }}"
-               class="min-h-[44px] px-5 inline-flex items-center text-sm font-bold text-forest hover:text-forest-800 underline underline-offset-4">
-                Lihat Seluruh Daftar Donasi →
+               class="group min-h-[44px] px-5 inline-flex items-center gap-2 text-sm font-bold text-forest hover:text-forest-800 underline underline-offset-4">
+                <span>Lihat Seluruh Daftar Donasi</span>
+                <span class="transition-transform duration-300 group-hover:translate-x-1.5">→</span>
             </a>
         </div>
 
         @if(isset($latestDonations) && $latestDonations->count() > 0)
-            <!-- Grid Donasi Aktif (Diperkecil & Ditambah Foto) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-5">
-                @foreach($latestDonations as $donation)
-                    <div class="bg-page rounded-2xl p-4 border border-sage/20 shadow-sm flex flex-col justify-between hover:shadow-md transition group">
+            <!-- Grid Donasi Aktif (Animasi Zoom-In + Fallback Gambar Otomatis) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                @foreach($latestDonations as $index => $donation)
+                    <div style="transition-delay: {{ ($index % 4) * 120 }}ms;"
+                         class="reveal-zoom bg-white rounded-2xl p-4 border border-sage/25 shadow-sm flex flex-col justify-between hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group">
                         <div class="space-y-3">
                             
-                            <!-- Foto Produk Makanan (Ringkas & Proporsional) -->
+                            <!-- Foto Produk Makanan (Dengan Fallback Otomatis jika file gambar belum ada) -->
                             @if($donation->photo)
-                                <div class="w-full aspect-[4/3] overflow-hidden rounded-xl border border-sage/10 bg-white relative flex items-center justify-center p-2">
+                                <div class="w-full aspect-[4/3] overflow-hidden rounded-xl border border-sage/15 bg-sage-100/30 relative flex items-center justify-center">
                                     <img src="{{ asset('storage/' . $donation->photo) }}"
                                          alt="Foto {{ $donation->title }}"
-                                         class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500">
+                                         onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <div class="hidden w-full h-full flex flex-col items-center justify-center text-forest/60 gap-1.5 p-3 text-center">
+                                        <span class="text-3xl" aria-hidden="true">🍱</span>
+                                        <span class="text-[11px] font-semibold line-clamp-1">{{ $donation->title }}</span>
+                                    </div>
                                 </div>
                             @else
                                 <div class="w-full aspect-[4/3] rounded-xl border border-sage/20 bg-sage-100/40 flex flex-col items-center justify-center text-forest/60 gap-1">
-                                    <span class="text-2xl" aria-hidden="true">🍱</span>
+                                    <span class="text-3xl" aria-hidden="true">🍱</span>
                                     <span class="text-[10px] font-semibold">Tanpa Foto</span>
                                 </div>
                             @endif
 
                             <!-- Badges -->
                             <div class="flex flex-wrap items-center justify-between gap-1.5">
-                                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-sage-100 text-forest border border-sage/30">
+                                <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-sage-100 text-forest border border-sage/30">
                                     {{ $donation->food_type ?? 'Pangan Berlebih' }}
                                 </span>
                                 @if(\Carbon\Carbon::parse($donation->deadline)->diffInHours(now()) <= 48)
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span>
                                         Urgent
                                     </span>
                                 @else
-                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                    <span class="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
                                         Tersedia
                                     </span>
                                 @endif
@@ -223,7 +362,7 @@
                                 </p>
                             </div>
 
-                            <!-- Info Details (Grid rapi) -->
+                            <!-- Info Details -->
                             <div class="space-y-1.5 pt-2 border-t border-sage/20 text-[11px] text-gray-700">
                                 <div class="flex items-center justify-between">
                                     <span class="font-semibold text-gray-500">Jumlah Porsi:</span>
@@ -246,7 +385,7 @@
                         <div class="pt-4 mt-3 border-t border-sage/20">
                             <a href="{{ route('donations.index') }}"
                                class="w-full min-h-[38px] px-3 py-2 inline-flex items-center justify-center text-[11px] font-bold text-white bg-forest hover:bg-forest-800 rounded-lg transition-colors shadow-sm">
-                                Detail & Klaim Donasi
+                                Detail &amp; Klaim Donasi
                             </a>
                         </div>
                     </div>
@@ -254,8 +393,8 @@
             </div>
         @else
             <!-- Keadaan Kosong (Empty State) -->
-            <div class="bg-page rounded-3xl p-10 sm:p-16 border border-dashed border-sage/40 text-center max-w-3xl mx-auto space-y-5">
-                <div class="w-16 h-16 rounded-3xl bg-forest-50 text-forest flex items-center justify-center text-3xl mx-auto shadow-inner">
+            <div class="reveal-zoom bg-white/90 backdrop-blur-sm rounded-3xl p-10 sm:p-16 border border-dashed border-sage/40 text-center max-w-3xl mx-auto space-y-5 shadow-sm">
+                <div class="w-16 h-16 rounded-3xl bg-forest-50 text-forest flex items-center justify-center text-3xl mx-auto shadow-inner animate-bounce">
                     🌾
                 </div>
                 <div class="space-y-2">
@@ -285,27 +424,34 @@
 
 
 <!-- ================================================================= -->
-<!-- JAVASCRIPT FOR HERO VIDEO & TYPEWRITER ANIMATION                  -->
+<!-- JAVASCRIPT: HERO VIDEO, TYPEWRITER & SCROLL REVEAL ANIMATIONS     -->
 <!-- ================================================================= -->
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // 1. Hero Video & Typewriter Animation
         const bgVideo = document.getElementById('hero-bg-video');
         const typewriterContainer = document.getElementById('typewriter-container');
         const typedContent = document.getElementById('typed-content');
+        const typewriterCursor = document.getElementById('typewriter-cursor');
         const textToType = "Platform Kolaborasi Berbagi Pangan & Mewujudkan Zero Hunger";
 
         function startTypewriter() {
             if (!typedContent || !typewriterContainer) return;
-            typewriterContainer.classList.remove('opacity-0');
+            typewriterContainer.classList.remove('opacity-0', 'translate-y-2');
             typedContent.textContent = '';
             let index = 0;
-            const speed = 40; // Kecepatan mengetik per karakter (ms)
+            const speed = 38;
 
             function typeChar() {
                 if (index < textToType.length) {
                     typedContent.textContent += textToType.charAt(index);
                     index++;
                     setTimeout(typeChar, speed);
+                } else if (typewriterCursor) {
+                    // Sembunyikan kursor 1.2 detik setelah selesai mengetik agar tampilan bersih
+                    setTimeout(() => {
+                        typewriterCursor.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                    }, 1200);
                 }
             }
             typeChar();
@@ -314,10 +460,26 @@
         if (bgVideo) {
             bgVideo.play().catch(err => console.log('Autoplay handled:', err));
             bgVideo.addEventListener('ended', () => {
-                bgVideo.pause(); // Tahan pada frame terakhir ("Satu Meja")
-                startTypewriter(); // Mulai efek mengetik dari nol saat video selesai
+                bgVideo.pause();
+                startTypewriter();
             });
         }
+
+        // 2. Scroll Reveal Observer untuk Section 2, 3, 4 & Garis Timeline
+        const animatedElements = document.querySelectorAll('.reveal-up, .reveal-zoom, .step-line-draw');
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -40px 0px'
+        });
+
+        animatedElements.forEach(el => observer.observe(el));
     });
 </script>
 @endsection
